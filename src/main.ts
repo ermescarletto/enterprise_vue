@@ -4,15 +4,15 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import router from './router';
 import { createPinia } from 'pinia';
+import 'primeicons/primeicons.css';
 import ".//assets/main.css"
-
+import 'primeflex/primeflex.css';
 
 const app = createApp(App);
 
 app.use(PrimeVue, {
     theme: {
         preset: Aura,
-        
     }
 });
 

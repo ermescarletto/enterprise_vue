@@ -1,59 +1,53 @@
 <template>
   <div class="login-container">
-    <Card style="width: 25rem; overflow: hidden">
+    <Card width="25%" >
       <template #header >
         <div class="logo">
-          <img  alt="logo ms_enterprise" src="../assets/enterprise.png" width="75%"/>
+          <img  alt="logo ms_enterprise" src="../assets/enterprise.png" width="50%"/>
         </div>
-          
         </template>
         <template #content>
+          <div class="flex align-items-center justify-content-center ">  
+            <div>
 
-      <form @submit.prevent="handleLogin">
-        <div class="p-fluid">
-          <div class="p-field">
-            <label for="email">Email</label>
-            <InputText id="email" v-model="email" required placeholder="Enter email" />
-          </div>
-          
-          <div class="p-field">
-            <label for="password">Password</label>
-            <Password id="password" v-model="password" required placeholder="Enter password" />
-          </div>
-
-          <div class="p-field-checkbox">
-            <Checkbox v-model="rememberMe" binary />
-            <label for="rememberMe">Remember me</label>
-          </div>
-
-          <Button label="Login" icon="pi pi-sign-in" class="w-100" type="submit" />
-        </div>
-
-        <div class="text-center mt-3">
-          <a href="#" @click="forgotPassword">Forgot your password?</a>
-        </div>
-      </form>
-        </template>
-        <template #footer>
-            <div class="flex gap-4 mt-1">
-                <Button label="Cancel" severity="secondary" outlined class="w-full" />
-                <Button label="Save" class="w-full" />
+            <form @submit.prevent="handleLogin">
+            <div class="flex m-2 align-items-center justify-content-center">
+            <IconField>
+            <InputIcon class="pi pi-envelope" />
+            <InputText id="email" v-model="email" required placeholder="E-mail" />
+            </IconField>
             </div>
-        </template>
+            <div class="flex m-2 align-items-center justify-content-center">
+                <Password v-model="value" :feedback="false" toggleMask placeholder="Senha"/>
 
-  </Card>
+            </div>  
+            <div class="flex m-2 align-items-right justify-content-right">
+              <Checkbox class="mr-2" v-model="rememberMe" binary />
 
+              <label class="text-sm" for="rememberMe">Lembrar usuário </label>
 
+            </div>
+      </form>
+    </div>
+      </div>
+    </template>
+    <template #footer>
+        <div class="flex justify-content-center ">          
+          <Button label="Login" icon="pi pi-lock"  class="m-2" iconPos="left" />
+          <Button label="Registrar" icon="pi pi-plus" class="m-2" severity="danger" iconPos="left"  />
+        </div>
+
+        <div class="flex justify-content-center text-xs">          
+         <a href="#">Recuperar minha senha</a>
+        </div>
+    </template>
+    </Card>
   </div>
-  
 <div>
-
-     
 
 
 </div>
 </template>
-
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
@@ -63,6 +57,8 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import Card from 'primevue/card';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
 
 export default defineComponent({
   components: {
@@ -71,6 +67,8 @@ export default defineComponent({
     Password,
     Button,
     Checkbox,
+    IconField,
+    InputIcon
   },
   setup() {
     const authStore = useAuthStore();
@@ -80,15 +78,38 @@ export default defineComponent({
     const rememberMe = ref(!!localStorage.getItem('rememberedEmail'));
 
     const handleLogin = async () => {
-      const response = await fakeLoginApi(); // Simular a requisição de login
-      if (response.token) {
-        authStore.login(response);
-        if (rememberMe.value) {
-          localStorage.setItem('rememberedEmail', email.value);
-        } else {
-          localStorage.removeItem('rememberedEmail');
+      try {
+        const response = await fetch('http://localhost:8080/api/auth', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Login failed');
         }
-        router.push({ name: 'Dashboard' });
+
+        const data = await response.json();
+
+        // Se o login for bem-sucedido e a API retornar um token
+        if (data.token) {
+          authStore.login(data); // Aqui assumimos que o authStore armazena o token
+          if (rememberMe.value) {
+            localStorage.setItem('rememberedEmail', email.value);
+          } else {
+            localStorage.removeItem('rememberedEmail');
+          }
+          router.push({ name: 'Dashboard' });
+        } else {
+          throw new Error('Invalid credentials');
+        }
+      } catch (error) {
+        alert('Login failed: ');
       }
     };
 
@@ -99,21 +120,6 @@ export default defineComponent({
     return { email, password, rememberMe, handleLogin, forgotPassword };
   },
 });
-
-// Função simulando requisição de login
-async function fakeLoginApi() {
-  return {
-    token: "980bee86183b2470a316664ea26eb4654640f96c",
-    user: {
-      id: 1,
-      username: "admin",
-      email: "ermes.carletto@gmail.com",
-      cpf: "00893073997",
-      is_staff: true,
-      is_active: true,
-    },
-  };
-}
 </script>
 
 <style scoped>
@@ -122,17 +128,9 @@ async function fakeLoginApi() {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #004d00, #008000);
+  background-image: url(../assets/background.png);
 }
 
-.login-card {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
 .logo {
   justify-content: center;
@@ -140,4 +138,5 @@ async function fakeLoginApi() {
   text-align: center;
   padding: 2rem;
 }
+
 </style>
