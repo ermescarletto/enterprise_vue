@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/views/LoginUser.vue';
-import Dashboard from '@/components/DashboardFront.vue';
+import Dashboard from '@/views/DashboardFront.vue';
+import GuiaInicial from '@/views/GuiaInicial.vue';
+import Page404 from '@/views/Page404.vue';
+import PageNotFound from '@/views/PageNotFound.vue';
 
 const routes = [
   {
@@ -15,6 +18,19 @@ const routes = [
     component: Dashboard,
     meta: { requiresAuth: true, title: 'MS Enterprise - Dashboard' },
   },
+  {
+    path: '/guia',
+    name: 'Guia Inicial',
+    component: GuiaInicial,
+    meta: { requiresAuth: true, title: 'MS Enterprise - Guia' },
+  },
+  {
+    path: '*',
+    name: '404',
+    component: PageNotFound,
+    meta: { requiresAuth: false, title: '404' },
+
+  }
 ];
 
 const router = createRouter({
