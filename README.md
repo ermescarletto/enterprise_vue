@@ -1,4 +1,16 @@
-# enterprise_ms
+# enterprise_vue
+
+This project is a corporative communication system. 
+
+- Doc Management
+- CRM
+- HCM
+- Ticket Management
+- CMS
+
+Provided by VERSE SOLUTIONS
+
+versesolutions.net
 
 ## Project setup
 ```
