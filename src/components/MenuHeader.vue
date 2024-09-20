@@ -13,9 +13,17 @@
               </a>
           </template>
           <template #end>
-              <div class="flex items-center gap-2">
-                  <InputText placeholder="Search" type="text" class="w-32 sm:w-auto" />
+            <div class="flex justify-content-center flex-wrap">
+              <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary font-bold border-round m-2">
+                  
+                  <p>{{authStore.user.username}}</p>
+                
+                </div>
+                <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary font-bold border-round m-2">
                   <Button icon="pi pi-sign-out" @click="logout" rounded severity="secondary"/>
+                
+                </div>
+
               </div>
           </template>
   </Menubar>
@@ -24,13 +32,13 @@
 <script setup lang="ts">
 
 import { ref } from 'vue';
-
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 
 import Menubar from 'primevue/menubar';
 import Badge from 'primevue/badge';
 import Button from 'primevue/button';
+
 
 const meuschamados = ref(3);
 const meusatendimentos = ref(2);
@@ -60,12 +68,12 @@ const router = useRouter();
           },          
           {
             label: 'Pessoa Física',
-            icon: 'pi pi-tags'
+            icon: 'pi pi-user'
           },
           
           {
             label: 'Pessoa Jurídica',
-            icon: 'pi pi-tags'
+            icon: 'pi pi-building'
           },
         
         ]
@@ -142,8 +150,14 @@ const router = useRouter();
                 icon: 'pi pi-bolt',
             },
             {
+                separator: true
+            },
+            {
                 label: 'Procedimento Padrão',
                 icon: 'pi pi-server',
+            },
+            {
+                separator: true
             },
             {
                 label: 'Fluxogramas',
@@ -151,6 +165,7 @@ const router = useRouter();
             }
         ]
     },
+
     {
         label: 'Atendimento',
         icon: 'pi pi-ticket',
@@ -161,26 +176,35 @@ const router = useRouter();
                 items: [
                 {
                 label: 'Novo Chamado',
-                icon: 'pi pi-bolt',
+                icon: 'pi pi-pencil',
               
               },
               {
+                separator: true
+            },
+              {
                   label: 'Atender Chamados',
-                  icon: 'pi pi-bolt',
+                  icon: 'pi pi-play',
                 badge: meusatendimentos,
 
                 },
+                {
+                separator: true
+            },
               {
                 label: 'Meus Chamados',
-                icon: 'pi pi-bolt',
+                icon: 'pi pi-bookmark-fill',
                 badge: meuschamados,
 
               }]
             },
+            {
+                separator: true
+            },
             
             {
                 label: 'Relatórios',
-                icon: 'pi pi-pencil',
+                icon: 'pi pi-chart-bar',
             }],
         badge: somaBadgeChamados
     }]);

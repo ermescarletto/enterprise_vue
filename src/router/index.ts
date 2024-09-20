@@ -24,13 +24,11 @@ const routes = [
     component: GuiaInicial,
     meta: { requiresAuth: true, title: 'MS Enterprise - Guia' },
   },
-  {
-    path: '*',
-    name: '404',
-    component: PageNotFound,
-    meta: { requiresAuth: false, title: '404' },
+  { path: '/:pathMatch(.*)*', 
+    name: 'NotFound', 
+    component: PageNotFound },
 
-  }
+
 ];
 
 const router = createRouter({
