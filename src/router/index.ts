@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/views/LoginUser.vue';
 import Dashboard from '@/views/DashboardFront.vue';
 import GuiaInicial from '@/views/GuiaInicial.vue';
-import Page404 from '@/views/Page404.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
+import PessoaFisica from '@/views/PessoaFisica.vue';
 
 const routes = [
   {
@@ -23,6 +23,12 @@ const routes = [
     name: 'Guia Inicial',
     component: GuiaInicial,
     meta: { requiresAuth: true, title: 'MS Enterprise - Guia' },
+  },
+  {
+    path: '/pessoafisica',
+    name: 'Pessoa Física',
+    component: PessoaFisica,
+    meta: { requiresAuth: true, title: 'MS Enterprise - Pessoa Física' },
   },
   { path: '/:pathMatch(.*)*', 
     name: 'NotFound', 

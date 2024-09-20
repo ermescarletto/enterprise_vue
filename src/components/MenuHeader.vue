@@ -68,7 +68,9 @@ const router = useRouter();
           },          
           {
             label: 'Pessoa Física',
-            icon: 'pi pi-user'
+            icon: 'pi pi-user',
+            route: 'pessoafisica'
+
           },
           
           {
