@@ -1,49 +1,73 @@
 <template>
-<div class="dashboard"> 
+  <div class="dashboard">
     <MenuHeader></MenuHeader>
-    <div>
-    <DataTable
-      :value="items"
-      :filters="filters"
-      :sortField="sortField"
-      :sortOrder="sortOrder"
-      dataKey="id"
-      responsiveLayout="scroll"
-    >
-      <Column field="id" header="ID" sortable filter />
-      <Column field="name" header="Name" sortable filter />
-      <Column field="description" header="Description" sortable filter />
-      <Column field="created_at" header="Created At" sortable filter />
+    <div class="card">
 
-      <!-- Action Buttons for CRUD -->
-      <Column header="Actions" />
+    
+    <DataTable v-model:filters="filters" :value="pessoas" paginator :rows="10" dataKey="id" filterDisplay="row"
+      :loading="loading" :globalFilterFields="['nome', 'email', 'telefone']" class="mt-2" showGridlines stripedRows
+      removableSort>
+      <template #header>
+        <div class="flex justify-content-between flex-wrap">
+          <div class="m-2">
+            <Button class="mt-2" label="Adicionar" icon="pi pi-plus" @click="openNew" />
+          </div>
+          <div class="m-2"></div>
+          <div class="m-2">
+            <IconField>
+              <InputIcon>
+                <i class="pi pi-search" />
+              </InputIcon>
+              <InputText v-model="filters['nome'].value" placeholder="Buscar" />
+            </IconField>
+          </div>
+        </div>
+        
+
+
+      </template>
+      <template #empty> Nada encontrado... </template>
+      <template #loading> Carregando... </template>
+
+      <Column field="nome" header="Nome" style="min-width: 12rem">
+                <template #body="{ data }">
+                    {{ data.nome }}
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Buscar pelo nome" />
+                </template>
+            </Column>      <Column field="email" sortable header="E-mail"></Column>
+      <Column field="telefone" sortable header="Telefone"></Column>
+      <Column header="Ações">
+
+      </Column>
     </DataTable>
-
-    <!-- Dynamic Dialog for Create/Update -->
-    <Dialog v-model:visible="dialogVisible" header="Edit Item" :closable="false">
-      <form @submit.prevent="saveItem">
-        <div class="p-fluid">
-          <div class="field">
-            <label for="name">Name</label>
-            <InputText v-model="currentItem.name" id="name" />
+    </div>
+    <div>
+      <!-- Dynamic Dialog for Create/Update -->
+      <Dialog v-model:visible="dialogVisible" header="Edit Item" :closable="false">
+        <form @submit.prevent="saveItem">
+          <div class="p-fluid">
+            <div class="field">
+              <label for="name">Name</label>
+              <InputText v-model="currentItem.nome" id="name" />
+            </div>
+            <div class="field">
+              <label for="description">Description</label>
+              <InputText v-model="currentItem.email" id="description" />
+            </div>
           </div>
-          <div class="field">
-            <label for="description">Description</label>
-            <InputText v-model="currentItem.description" id="description" />
+          <div class="dialog-footer">
+            <Button label="Save" type="submit" />
+            <Button label="Cancel" class="p-button-secondary" @click="dialogVisible = false" />
           </div>
-        </div>
-        <div class="dialog-footer">
-          <Button label="Save" type="submit" />
-          <Button label="Cancel" class="p-button-secondary" @click="dialogVisible = false" />
-        </div>
-      </form>
-    </Dialog>
+        </form>
+      </Dialog>
 
-    <!-- Button for Adding a New Item -->
-    <Button label="Add New Item" icon="pi pi-plus" @click="openNew" />
+      <!-- Button for Adding a New Item -->
+    </div>
+
   </div>
-
-</div>
 </template>
 
 <script setup lang="ts">
@@ -52,104 +76,104 @@
 
 import MenuHeader from '../components/MenuHeader.vue';
 
-import { ref } from 'vue';
-import axios from 'axios';
-import DataTable from '@/components/DataTable.vue';
+import axios from "axios";
+import { useAuthStore } from '@/stores/auth';
+import { FilterMatchMode } from '@primevue/core/api';
+import { ref, onMounted } from 'vue';
+import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 // Define types for the items
-interface Item {
-  id: number | null;
-  name: string;
-  description: string;
-  created_at: string;
+
+const loading = ref(true);
+
+
+interface PessoaFisica {
+  id: number;
+  nome: string;
+  data_nascimento: string;
+  cpf: string;
+  sexo: string;
+  email: string;
+  telefone: string;
 }
 
+const auth = useAuthStore();
+
 // State variables
-const items = ref<Item[]>([]);
-const filters = ref({});
-const sortField = ref('id');
-const sortOrder = ref(1);
+const pessoas = ref();
 const dialogVisible = ref(false);
-const currentItem = ref<Item>({
-  id: null,
-  name: '',
-  description: '',
-  created_at: '',
+const currentItem = ref<PessoaFisica>({
+  id: 0,
+  nome: '',
+  data_nascimento: '',
+  cpf: '',
+  sexo: '',
+  email: '',
+  telefone: '',
 });
 
-// Fetch data from API
-const fetchItems = async () => {
-  try {
-    const response = await axios.get('http://localhost:8000/api/items/');
-    items.value = response.data;
-  } catch (error) {
-    console.error('Error fetching items:', error);
+const filters = ref({
+  'nome': { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
+
+const options = {
+  method: 'GET',
+  url: 'http://localhost:8000/cadastros/api/pessoasfisicas/',
+  headers: {
+    'Content-Type': 'application/json',
+    'User-Agent': 'insomnia/10.0.0',
+    Authorization: 'TOKEN ' + auth.token
   }
 };
 
-// Open dialog for new item
-const openNew = () => {
-  dialogVisible.value = true;
-  currentItem.value = { id: null, name: '', description: '', created_at: '' }; // Reset form
-};
+function saveItem() {
 
-// Save item (Create/Update)
-const saveItem = async () => {
-  try {
-    if (currentItem.value.id) {
-      // Update existing item
-      await axios.put(`http://localhost:8000/api/items/${currentItem.value.id}/`, currentItem.value);
-    } else {
-      // Create new item
-      await axios.post('http://localhost:8000/api/items/', currentItem.value);
-    }
-    dialogVisible.value = false;
-    fetchItems(); // Refresh items after saving
-  } catch (error) {
-    console.error('Error saving item:', error);
-  }
-};
+}
 
-/*// Edit item
-const editItem = (item: Item) => {
-  currentItem.value = { ...item }; // Clone the item
-  dialogVisible.value = true;
-};
+function openNew() {
 
-// Delete item
-const deleteItem = async (id: number) => {
-  try {
-    await axios.delete(`http://localhost:8000/api/items/${id}/`);
-    fetchItems(); // Refresh items after deletion
-  } catch (error) {
-    console.error('Error deleting item:', error);
-  }
-};*/
+}
 
 
-// Fetch items when the component is mounted
-fetchItems();
+axios.request(options).then(function (response) {
+  console.log(response.data);
+  console.log(auth.token);
 
-    
+  onMounted(pessoas.value = response.data);
+  loading.value = false;
+  console.log(pessoas.value);
+
+}).catch(function (error) {
+  console.log('erro maximo');
+  console.error(error);
+  console.log(auth.token);
+});
+
 </script>
 
 
 
 <style scoped>
-
-
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
+
 .dashboard {
-  min-height: 100vh; /* Garante que o fundo cubra a altura completa da janela */
+  min-height: 100vh;
+  /* Garante que o fundo cubra a altura completa da janela */
   padding: 10px;
   background-image: url(../assets/background.png);
-  background-repeat: repeat; /* Repetir em ambas direções */
-  background-size: cover; /* O fundo cobre a área visível */
-  background-attachment: fixed; /* Mantém o fundo fixo enquanto o conteúdo rola */
+  background-repeat: repeat;
+  /* Repetir em ambas direções */
+  background-size: cover;
+  /* O fundo cobre a área visível */
+  background-attachment: fixed;
+  /* Mantém o fundo fixo enquanto o conteúdo rola */
 }
 </style>
