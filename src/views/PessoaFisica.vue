@@ -5,7 +5,7 @@
 
     
     <DataTable v-model:filters="filters" :value="pessoas" paginator :rows="10" dataKey="id" filterDisplay="row"
-      :loading="loading" :globalFilterFields="['nome', 'email', 'telefone']" class="mt-2" showGridlines stripedRows
+      :loading="loading" :globalFilterFields="['nome', 'email', 'telefone', 'cpf']" class="mt-2" showGridlines stripedRows
       removableSort>
       <template #header>
         <div class="flex justify-content-between flex-wrap">
@@ -18,7 +18,7 @@
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText v-model="filters['nome'].value" placeholder="Buscar" />
+              <InputText v-model="filters['cpf'].value" placeholder="Buscar pelo CPF" />
             </IconField>
           </div>
         </div>
@@ -30,39 +30,67 @@
       <template #loading> Carregando... </template>
 
       <Column field="nome" header="Nome" style="min-width: 12rem">
-                <template #body="{ data }">
-                    {{ data.nome }}
-                </template>
-                <template #filter="{ filterModel, filterCallback }">
-                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Buscar pelo nome" />
-                </template>
-            </Column>      <Column field="email" sortable header="E-mail"></Column>
-      <Column field="telefone" sortable header="Telefone"></Column>
+        <template #body="{ data }">
+            {{ data.nome }}
+        </template>
+        <template #filter="{ filterModel }">
+            <InputText v-model="filterModel.value" type="text" placeholder="Search by name" />
+        </template>
+      </Column>     
+      <Column header="Email" filterField="email" field="email" style="min-width: 12rem">
+        <template #body="{ data }">
+            <div class="flex items-center gap-2">
+                <span>{{ data.email }}</span>
+            </div>
+        </template>
+        <template #filter="{ filterModel }">
+            <InputText v-model="filterModel.value" type="text" placeholder="Search by email" />
+        </template>
+        <template #filterclear="{ filterCallback }">
+            <Button type="button" icon="pi pi-times" @click="filterCallback()" severity="secondary"></Button>
+        </template>
+        <template #filterapply="{ filterCallback }">
+            <Button type="button" icon="pi pi-check" @click="filterCallback()" severity="success"></Button>
+        </template>
+        <template #filterfooter>
+            <div class="px-4 pt-0 pb-4 text-center">Customized Buttons</div>
+        </template>
+      </Column>
+      <Column field="telefone" sortable header="Telefone">
+        <template #body="{ data }">
+            <div class="flex items-center gap-2">
+                <span>{{ data.telefone }}</span>
+            </div>
+        </template>
+        <template #filter="{ filterModel }">
+            <InputText v-model="filterModel.value" type="text" placeholder="Search by telefone" />
+        </template>
+        <template #filterclear="{ filterCallback }">
+            <Button type="button" icon="pi pi-times" @click="filterCallback()" severity="secondary"></Button>
+        </template>
+        <template #filterapply="{ filterCallback }">
+            <Button type="button" icon="pi pi-check" @click="filterCallback()" severity="success"></Button>
+        </template>
+        <template #filterfooter>
+            <div class="px-4 pt-0 pb-4 text-center">Customized Buttons</div>
+        </template>
+      </Column>
       <Column header="Ações">
+        <template #body="{ data }">
+            <Button icon="pi pi-search" class="p-button-text p-button-info" @click="editItem(data)" />
 
+            <Button icon="pi pi-pencil" class="p-button-text" @click="editItem(data)" />
+            <Button icon="pi pi-trash" class="p-button-danger p-button-text" @click="deleteItem(data.id)" />
+            
+          </template>
       </Column>
     </DataTable>
     </div>
     <div>
-      <!-- Dynamic Dialog for Create/Update -->
-      <Dialog v-model:visible="dialogVisible" header="Edit Item" :closable="false">
-        <form @submit.prevent="saveItem">
-          <div class="p-fluid">
-            <div class="field">
-              <label for="name">Name</label>
-              <InputText v-model="currentItem.nome" id="name" />
-            </div>
-            <div class="field">
-              <label for="description">Description</label>
-              <InputText v-model="currentItem.email" id="description" />
-            </div>
-          </div>
-          <div class="dialog-footer">
-            <Button label="Save" type="submit" />
-            <Button label="Cancel" class="p-button-secondary" @click="dialogVisible = false" />
-          </div>
-        </form>
-      </Dialog>
+
+      <Dialog v-model:visible="dialogVisible" header="Create/Edit Pessoa" :closable="false">
+      <PessoaForm :formData="currentItem" :isEditing="isEditing" @save="saveItem" @cancel="closeDialog" />
+    </Dialog>
 
       <!-- Button for Adding a New Item -->
     </div>
@@ -86,6 +114,7 @@ import Button from 'primevue/button';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
+
 // Define types for the items
 
 const loading = ref(true);
@@ -106,6 +135,7 @@ const auth = useAuthStore();
 // State variables
 const pessoas = ref();
 const dialogVisible = ref(false);
+const isEditing = ref(false);
 const currentItem = ref<PessoaFisica>({
   id: 0,
   nome: '',
@@ -118,6 +148,10 @@ const currentItem = ref<PessoaFisica>({
 
 const filters = ref({
   'nome': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'cpf' : { value: null, matchMode: FilterMatchMode.CONTAINS},
+  'email': { value: null, matchMode: FilterMatchMode.CONTAINS }, 
+  'telefone': { value: null, matchMode: FilterMatchMode.CONTAINS} // Add this for email filtering
+
 });
 
 const options = {
@@ -134,11 +168,21 @@ function saveItem() {
 
 }
 
+
+function editItem(item: PessoaFisica) {
+  currentItem.value = { ...item };
+  isEditing.value = true;
+  dialogVisible.value = true;
+}
+
 function openNew() {
 
 }
 
 
+function closeDialog() {
+  dialogVisible.value = false;
+}
 axios.request(options).then(function (response) {
   console.log(response.data);
   console.log(auth.token);
