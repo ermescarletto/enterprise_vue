@@ -26,7 +26,7 @@
       
         <div class="flex gap-4 mt-1">
           
-            <Button label="Mais" class="w-full" icon="pi pi-plus"/>
+            <Button label="Mais" class="w-full" icon="pi pi-plus" @click="router.push('/atendimento')"/>
         </div>
     </template>
 </Card>

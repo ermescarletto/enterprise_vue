@@ -4,6 +4,7 @@ import Dashboard from '@/views/DashboardFront.vue';
 import GuiaInicial from '@/views/GuiaInicial.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import PessoaFisica from '@/views/PessoaFisica.vue';
+import IndexAtendimento from '@/views/atendimento/IndexAtendimento.vue';
 
 const routes = [
   {
@@ -11,13 +12,23 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: { title: 'MS Enterprise - Login'}
+    
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
     meta: { requiresAuth: true, title: 'MS Enterprise - Dashboard' },
+    
   },
+  {
+    path: '/atendimento',
+    name: 'Atendimento',
+    component: IndexAtendimento,
+    meta: { requiresAuth: true, title: 'MS Enterprise - Atendimento' },
+    
+  },
+
   {
     path: '/guia',
     name: 'Guia Inicial',
@@ -30,6 +41,7 @@ const routes = [
     component: PessoaFisica,
     meta: { requiresAuth: true, title: 'MS Enterprise - Pessoa Física' },
   },
+  
   { path: '/:pathMatch(.*)*', 
     name: 'NotFound', 
     component: PageNotFound },
@@ -44,6 +56,7 @@ const router = createRouter({
 
 // Middleware de autenticação
 router.beforeEach((to, from, next) => {
+  document.title = 'MS Enterprise';
   const isAuthenticated = !!localStorage.getItem('token');
   const title = to.meta.title as string;
   if (title) {

@@ -2,7 +2,7 @@
 <div class="header">
     <Menubar :model="items">
           <template #start>
-              <img src="../assets/logo.png" alt="logo" width="30px" />
+              <img src="../assets/logo.png" alt="logo" width="30px" @click="router.push('/dashboard')" />
           </template>
           <template #item="{ item, props, hasSubmenu, root }">
               <a v-ripple class="flex items-center" v-bind="props.action" :href="item.route">
@@ -51,7 +51,8 @@ const router = useRouter();
   const items = ref([
     {
         label: 'Início',
-        icon: 'pi pi-home'
+        icon: 'pi pi-home',
+        route: 'dashboard'
     },
     {
         label: 'Cadastros',
@@ -85,10 +86,12 @@ const router = useRouter();
         {
             label: 'Atendimento',
             icon: 'pi pi-ticket',
+            route: '/atendimento',
             items: [ 
           {
             label: 'Equipe',
-            icon: 'pi pi-users'
+            icon: 'pi pi-users',
+            route: '/equipe'
           },          
           {
             label: 'Tipo de Atendimento',

@@ -1,10 +1,11 @@
 <template>
+  <div class="dashboard">
     <MenuHeader></MenuHeader>
     <div class="card">
 
     
-    <DataTable v-model:filters="filters" :value="pessoas" paginator :rows="10" dataKey="id" filterDisplay="row"
-      :loading="loading" :globalFilterFields="['nome', 'email', 'telefone', 'cpf']" class="mt-2" showGridlines stripedRows
+    <DataTable v-model:filters="filters" :value="equipe" paginator :rows="10" dataKey="id" filterDisplay="row"
+      :loading="loading" :globalFilterFields="['nome']" class="mt-2" showGridlines stripedRows
       removableSort>
       <template #header>
         <div class="flex justify-content-between flex-wrap">
@@ -17,7 +18,7 @@
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText v-model="filters['cpf'].value" placeholder="Buscar pelo CPF" />
+              <InputText v-model="filters['nome'].value" placeholder="Buscar pelo nome" />
             </IconField>
           </div>
         </div>
@@ -36,50 +37,12 @@
             <InputText v-model="filterModel.value" type="text" placeholder="Search by name" />
         </template>
       </Column>     
-      <Column header="Email" filterField="email" field="email" style="min-width: 12rem">
-        <template #body="{ data }">
-            <div class="flex items-center gap-2">
-                <span>{{ data.email }}</span>
-            </div>
-        </template>
-        <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" type="text" placeholder="Search by email" />
-        </template>
-        <template #filterclear="{ filterCallback }">
-            <Button type="button" icon="pi pi-times" @click="filterCallback()" severity="secondary"></Button>
-        </template>
-        <template #filterapply="{ filterCallback }">
-            <Button type="button" icon="pi pi-check" @click="filterCallback()" severity="success"></Button>
-        </template>
-        <template #filterfooter>
-            <div class="px-4 pt-0 pb-4 text-center">Customized Buttons</div>
-        </template>
-      </Column>
-      <Column field="telefone" sortable header="Telefone">
-        <template #body="{ data }">
-            <div class="flex items-center gap-2">
-                <span>{{ data.telefone }}</span>
-            </div>
-        </template>
-        <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" type="text" placeholder="Search by telefone" />
-        </template>
-        <template #filterclear="{ filterCallback }">
-            <Button type="button" icon="pi pi-times" @click="filterCallback()" severity="secondary"></Button>
-        </template>
-        <template #filterapply="{ filterCallback }">
-            <Button type="button" icon="pi pi-check" @click="filterCallback()" severity="success"></Button>
-        </template>
-        <template #filterfooter>
-            <div class="px-4 pt-0 pb-4 text-center">Customized Buttons</div>
-        </template>
-      </Column>
       <Column header="Ações">
         <template #body="{ data }">
             <Button icon="pi pi-search" class="p-button-text p-button-info" @click="editItem(data)" />
 
             <Button icon="pi pi-pencil" class="p-button-text" @click="editItem(data)" />
-            <Button icon="pi pi-trash" class="p-button-danger p-button-text" @click="deleteItem(data.id)" />
+            <Button icon="pi pi-trash" class="p-button-danger p-button-text" @click="" />
             
           </template>
       </Column>
@@ -94,6 +57,7 @@
       <!-- Button for Adding a New Item -->
     </div>
 
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -118,43 +82,32 @@ import InputText from 'primevue/inputtext';
 const loading = ref(true);
 
 
-interface PessoaFisica {
+interface Equipe {
   id: number;
   nome: string;
-  data_nascimento: string;
-  cpf: string;
-  sexo: string;
-  email: string;
-  telefone: string;
+
 }
 
 const auth = useAuthStore();
 
 // State variables
-const pessoas = ref();
+const equipe = ref();
 const dialogVisible = ref(false);
 const isEditing = ref(false);
-const currentItem = ref<PessoaFisica>({
+const currentItem = ref<Equipe>({
   id: 0,
-  nome: '',
-  data_nascimento: '',
-  cpf: '',
-  sexo: '',
-  email: '',
-  telefone: '',
+  nome: ''
 });
 
 const filters = ref({
   'nome': { value: null, matchMode: FilterMatchMode.CONTAINS },
-  'cpf' : { value: null, matchMode: FilterMatchMode.CONTAINS},
-  'email': { value: null, matchMode: FilterMatchMode.CONTAINS }, 
-  'telefone': { value: null, matchMode: FilterMatchMode.CONTAINS} // Add this for email filtering
+ 
 
 });
 
 const options = {
   method: 'GET',
-  url: 'http://localhost:8000/cadastros/api/pessoasfisicas/',
+  url: 'http://localhost:8000/atendimento/api/equipe/',
   headers: {
     'Content-Type': 'application/json',
     'User-Agent': 'insomnia/10.0.0',
@@ -167,7 +120,7 @@ function saveItem() {
 }
 
 
-function editItem(item: PessoaFisica) {
+function editItem(item: Equipe) {
   currentItem.value = { ...item };
   isEditing.value = true;
   dialogVisible.value = true;
@@ -185,9 +138,9 @@ axios.request(options).then(function (response) {
   console.log(response.data);
   console.log(auth.token);
 
-  onMounted(pessoas.value = response.data);
+  onMounted(equipe.value = response.data);
   loading.value = false;
-  console.log(pessoas.value);
+  console.log(equipe.value);
 
 }).catch(function (error) {
   console.log('erro maximo');
@@ -204,5 +157,18 @@ axios.request(options).then(function (response) {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.dashboard {
+  min-height: 100vh;
+  /* Garante que o fundo cubra a altura completa da janela */
+  padding: 10px;
+  background-image: url(../assets/background.png);
+  background-repeat: repeat;
+  /* Repetir em ambas direções */
+  background-size: cover;
+  /* O fundo cobre a área visível */
+  background-attachment: fixed;
+  /* Mantém o fundo fixo enquanto o conteúdo rola */
 }
 </style>

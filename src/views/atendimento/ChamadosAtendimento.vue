@@ -1,4 +1,5 @@
 <template>
+  <div class="dashboard">
     <MenuHeader></MenuHeader>
     <div class="card">
 
@@ -94,6 +95,7 @@
       <!-- Button for Adding a New Item -->
     </div>
 
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -118,23 +120,13 @@ import InputText from 'primevue/inputtext';
 const loading = ref(true);
 
 
-interface PessoaFisica {
-  id: number;
-  nome: string;
-  data_nascimento: string;
-  cpf: string;
-  sexo: string;
-  email: string;
-  telefone: string;
-}
-
 const auth = useAuthStore();
 
 // State variables
 const pessoas = ref();
 const dialogVisible = ref(false);
 const isEditing = ref(false);
-const currentItem = ref<PessoaFisica>({
+const currentItem = ref<>({
   id: 0,
   nome: '',
   data_nascimento: '',
@@ -204,5 +196,18 @@ axios.request(options).then(function (response) {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.dashboard {
+  min-height: 100vh;
+  /* Garante que o fundo cubra a altura completa da janela */
+  padding: 10px;
+  background-image: url(../assets/background.png);
+  background-repeat: repeat;
+  /* Repetir em ambas direções */
+  background-size: cover;
+  /* O fundo cobre a área visível */
+  background-attachment: fixed;
+  /* Mantém o fundo fixo enquanto o conteúdo rola */
 }
 </style>
