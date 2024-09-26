@@ -114,6 +114,7 @@ const router = useRouter();
             
               label: 'Departamento',
               icon: 'pi pi-sitemap',
+              route: '/departamentos'
             },
             {
               label: 'Unidade',
@@ -150,9 +151,19 @@ const router = useRouter();
         label: 'Documentos',
         icon: 'pi pi-bookmark-fill',
         items: [
+          {
+            label: 'Documentos',
+        icon: 'pi pi-bookmark-fill',
+        route: '/documentos',
+          },
+
+          {
+                separator: true
+            },
             {
                 label: 'Políticas',
                 icon: 'pi pi-bolt',
+                route: '/politicas'
             },
             {
                 separator: true
@@ -160,6 +171,7 @@ const router = useRouter();
             {
                 label: 'Procedimento Padrão',
                 icon: 'pi pi-server',
+                route: '/pops'
             },
             {
                 separator: true
@@ -167,6 +179,7 @@ const router = useRouter();
             {
                 label: 'Fluxogramas',
                 icon: 'pi pi-pencil',
+                route: '/fluxogramas'
             }
         ]
     },

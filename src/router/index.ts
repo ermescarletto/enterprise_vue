@@ -5,6 +5,8 @@ import GuiaInicial from '@/views/GuiaInicial.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import PessoaFisica from '@/views/PessoaFisica.vue';
 import IndexAtendimento from '@/views/atendimento/IndexAtendimento.vue';
+import IndexDocumentos from '@/views/IndexDocumentos.vue';
+import OrganogramaEmpresarial from '@/views/empresa/OrganogramaEmpresarial.vue';
 
 const routes = [
   {
@@ -26,6 +28,21 @@ const routes = [
     name: 'Atendimento',
     component: IndexAtendimento,
     meta: { requiresAuth: true, title: 'MS Enterprise - Atendimento' },
+    
+  },
+  {
+    path: '/documentos',
+    name: 'Documentos',
+    component: IndexDocumentos,
+    meta: { requiresAuth: true, title: 'MS Enterprise - Documentos' },
+    
+  },
+
+  {
+    path: '/departamentos',
+    name: 'Departamentos',
+    component: OrganogramaEmpresarial,
+    meta: { requiresAuth: true, title: 'MS Enterprise - Organograma' },
     
   },
 

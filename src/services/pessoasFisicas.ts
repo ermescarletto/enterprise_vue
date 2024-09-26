@@ -6,16 +6,37 @@ const auth = useAuthStore();
 const API_URL = 'http://localhost:8000/cadastros/api/pessoasfisicas/';
 
 
-export interface PessoaFisica {
-    id: number;
-    nome: string;
-    data_nascimento: string;
-    cpf: string;
-    sexo: string;
-    email: string;
-    telefone: string;
+
+
+export class PessoaFisica {
+  id: number;
+  nome: string;
+  data_nascimento: string;
+  cpf: string;
+  sexo: string;
+  email: string;
+  telefone: string;
+
+  constructor(
+    id: number,
+    nome: string,
+    data_nascimento: string,
+    cpf: string,
+    sexo: string,
+    email: string,
+    telefone: string
+  ) {
+    this.id = id;
+    this.nome = nome;
+    this.data_nascimento = data_nascimento;
+    this.cpf = cpf;
+    this.sexo = sexo;
+    this.email = email;
+    this.telefone = telefone;
   }
-  
+
+}
+
 export const pessoaService = {
   getAll() {
     return axios.get(API_URL, {

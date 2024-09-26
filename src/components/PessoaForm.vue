@@ -24,9 +24,9 @@
 
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
-
+import { PessoaFisica } from '@/services/pessoasFisicas';
 const props = defineProps({
-  formData: Object,
+  formData: PessoaFisica,
   isEditing: Boolean,
 });
 
