@@ -5,8 +5,9 @@ import GuiaInicial from '@/views/GuiaInicial.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import PessoaFisica from '@/views/PessoaFisica.vue';
 import IndexAtendimento from '@/views/atendimento/IndexAtendimento.vue';
-import IndexDocumentos from '@/views/IndexDocumentos.vue';
+import IndexDocumentos from '@/views/documentos/IndexDocumentos.vue';
 import OrganogramaEmpresarial from '@/views/empresa/OrganogramaEmpresarial.vue';
+import CadastroPoliticas from '@/views/documentos/CadastroPoliticas.vue';
 
 const routes = [
   {
@@ -35,6 +36,13 @@ const routes = [
     name: 'Documentos',
     component: IndexDocumentos,
     meta: { requiresAuth: true, title: 'MS Enterprise - Documentos' },
+    
+  },
+  {
+    path: '/politicas',
+    name: 'Politicas',
+    component: CadastroPoliticas,
+    meta: { requiresAuth: true, title: 'MS Enterprise - Políticas' },
     
   },
 

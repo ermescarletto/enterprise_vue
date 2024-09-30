@@ -1,7 +1,17 @@
 <template>
     <MenuHeader></MenuHeader>
+
     <div class="card mt-2">
-        <TreeTable :value="nodes" tableStyle="min-width: 50rem" :filters="filters" :paginator="true" :rows="5" :rowsPerPageOptions="[5, 10, 25]" :filterMode="filterMode.value">
+        
+        <TreeTable 
+        :value="nodes" 
+        tableStyle="min-width: 50rem" 
+        :filters="filters" 
+        :paginator="true" 
+        :rows="5" 
+        :rowsPerPageOptions="[5, 10, 25]" 
+        :filterMode="filterMode.value"
+        :loading="loading">
             <template #header>
                 <div class="flex justify-content-between flex-wrap">
                     <div class="text-xl font-bold">Documentos</div>
@@ -23,7 +33,6 @@
             <div class="flex flex-wrap gap-2">
                 <Button type="button" icon="pi pi-file" rounded />
                 <Button type="button" icon="pi pi-search" rounded />
-
             </div>
         </template>
         <template #footer>
@@ -43,79 +52,27 @@ import Button from 'primevue/button'; // Importa o componente Button
 import IconField from 'primevue/iconfield';
 import InputText from 'primevue/inputtext';
 import InputIcon from 'primevue/inputicon';
+import { useAuthStore } from '@/stores/auth';
+import DocumentosService from '@/services/indexDocumentos';
 
+
+
+
+const loading = ref(true); // Add loading state
+const auth = useAuthStore();
 const filters = ref({});
 const filterMode = ref({ label: 'Lenient', value: 'lenient' });
+const nodes = ref();
 
 
+
+
+
+/*
 
 const NodeService = {
     getTreeNodesData() {
         return [
-            {
-                key: '0',
-                label: 'Documents',
-                data: 'Documents Folder',
-                icon: 'pi pi-fw pi-inbox',
-                children: [
-                    {
-                        key: '0-0',
-                        label: 'Work',
-                        data: 'Work Folder',
-                        icon: 'pi pi-fw pi-cog',
-                        children: [
-                            { key: '0-0-0', label: 'Expenses.doc', icon: 'pi pi-fw pi-file', data: 'Expenses Document' },
-                            { key: '0-0-1', label: 'Resume.doc', icon: 'pi pi-fw pi-file', data: 'Resume Document' }
-                        ]
-                    },
-                    {
-                        key: '0-1',
-                        label: 'Home',
-                        data: 'Home Folder',
-                        icon: 'pi pi-fw pi-home',
-                        children: [{ key: '0-1-0', label: 'Invoices.txt', icon: 'pi pi-fw pi-file', data: 'Invoices for this month' }]
-                    }
-                ]
-            },
-            {
-                key: '1',
-                label: 'Events',
-                data: 'Events Folder',
-                icon: 'pi pi-fw pi-calendar',
-                children: [
-                    { key: '1-0', label: 'Meeting', icon: 'pi pi-fw pi-calendar-plus', data: 'Meeting' },
-                    { key: '1-1', label: 'Product Launch', icon: 'pi pi-fw pi-calendar-plus', data: 'Product Launch' },
-                    { key: '1-2', label: 'Report Review', icon: 'pi pi-fw pi-calendar-plus', data: 'Report Review' }
-                ]
-            },
-            {
-                key: '2',
-                label: 'Movies',
-                data: 'Movies Folder',
-                icon: 'pi pi-fw pi-star-fill',
-                children: [
-                    {
-                        key: '2-0',
-                        icon: 'pi pi-fw pi-star-fill',
-                        label: 'Al Pacino',
-                        data: 'Pacino Movies',
-                        children: [
-                            { key: '2-0-0', label: 'Scarface', icon: 'pi pi-fw pi-video', data: 'Scarface Movie' },
-                            { key: '2-0-1', label: 'Serpico', icon: 'pi pi-fw pi-video', data: 'Serpico Movie' }
-                        ]
-                    },
-                    {
-                        key: '2-1',
-                        label: 'Robert De Niro',
-                        icon: 'pi pi-fw pi-star-fill',
-                        data: 'De Niro Movies',
-                        children: [
-                            { key: '2-1-0', label: 'Goodfellas', icon: 'pi pi-fw pi-video', data: 'Goodfellas Movie' },
-                            { key: '2-1-1', label: 'Untouchables', icon: 'pi pi-fw pi-video', data: 'Untouchables Movie' }
-                        ]
-                    }
-                ]
-            }
         ];
     },
 
@@ -134,7 +91,7 @@ const NodeService = {
                         key: '0-0',
                         data: {
                             codigo: 'MS-PB-001',
-                            nome: 'Procedimento Operacional Padrao',
+                            nome: 'Solicitação de Benefício',
                             departamento: 'Recursos Humanos',
                             anexo: '/arquivo.pdf',
                         },
@@ -180,6 +137,26 @@ const NodeService = {
                             },
                         ],
                     },
+                    {
+                        key: '1-1',
+                        data: {
+                            codigo: 'MS-PR-POP-002',
+                            nome: 'POP - Solicitar Adiantamento',
+                            departamento: 'Financeiro',
+                            anexo: '/arquivo.pdf',
+                        },
+                        children: [
+                            {
+                                key: '1-0-0',
+                                data: {
+                                    codigo: 'MS-PR-FLX-002',
+                                    nome: 'Fluxograma do Processo de Adiantamento',
+                                    departamento: 'Financeiro',
+                                    anexo: '/arquivo.pdf',
+                                },
+                            },
+                        ],
+                    },
                 ],
             },
         ];
@@ -192,13 +169,19 @@ const NodeService = {
     getTreeNodes() {
         return Promise.resolve(this.getTreeNodesData());
     }
-};
-
-onMounted(() => {
-    NodeService.getTreeTableNodes().then((data) => (nodes.value = data));
+};*/
+onMounted(async () => {
+    try {
+        const documentosData = await DocumentosService.getDocumentos(auth.token);
+        nodes.value = documentosData;
+    } catch (error) {
+        console.error("Failed to load documentos:", error);
+    } finally {
+        loading.value = false; // Set loading to false after the data is loaded
+  }
 });
 
-const nodes = ref();
+
 
 
 </script>
