@@ -1,174 +1,155 @@
 <template>
-  <div class="dashboard">
-    <MenuHeader></MenuHeader>
-    <div class="card">
+  <MenuHeader></MenuHeader>
+  <div class="card mt-2">
 
-    
-    <DataTable v-model:filters="filters" :value="equipe" paginator :rows="10" dataKey="id" filterDisplay="row"
-      :loading="loading" :globalFilterFields="['nome']" class="mt-2" showGridlines stripedRows
-      removableSort>
-      <template #header>
-        <div class="flex justify-content-between flex-wrap">
-          <div class="m-2">
-            <Button class="mt-2" label="Adicionar" icon="pi pi-plus" @click="openNew" />
-          </div>
-          <div class="m-2"></div>
-          <div class="m-2">
-            <IconField>
-              <InputIcon>
-                <i class="pi pi-search" />
-              </InputIcon>
-              <InputText v-model="filters['nome'].value" placeholder="Buscar pelo nome" />
-            </IconField>
-          </div>
-        </div>
-        
 
+      <DataTable v-model:filters="filters" :value="politicas" paginator :rows="10" dataKey="id" filterDisplay="row"
+    :loading="loading" :globalFilterFields="['id', 'codigo_politica', 'titulo_politica', 'texto_politica']" class="mt-2" showGridlines stripedRows
+    removableSort>
+
+          <template #header>
+              <div class="flex justify-content-between flex-wrap">
+                  <div class="text-xl font-bold">Cadastro de Equipes</div>
+
+          <IconField>
+              <InputIcon class="pi pi-search" />
+              <InputText :v-model="filters" placeholder="Pesquisa" />
+          </IconField>
+      </div>
+
+  </template>
+          <Column header="Código" field="codigo_politica"></Column>
+          <Column header="Documento" field="titulo_politica"></Column>
+          <Column header="Departamento" field="departamento.nome"></Column>
+
+
+          <Column style="width: 10rem" header="Anexos">
+      <template  #body="{ data }">
+               <div class="flex flex-wrap gap-2">            
+                      <Button icon="pi pi-search" class="p-button-text p-button-info" @click="viewPolitica(data)" />
+                      <Button icon="pi pi-pencil" class="p-button-text" @click="editPolitica(data)" />
+                      <Button icon="pi pi-trash" class="p-button-danger p-button-text" />
+                  </div>
+      </template>
+      <template #footer>
 
       </template>
-      <template #empty> Nada encontrado... </template>
-      <template #loading> Carregando... </template>
-
-      <Column field="nome" header="Nome" style="min-width: 12rem">
-        <template #body="{ data }">
-            {{ data.nome }}
-        </template>
-        <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" type="text" placeholder="Search by name" />
-        </template>
-      </Column>     
-      <Column header="Ações">
-        <template #body="{ data }">
-            <Button icon="pi pi-search" class="p-button-text p-button-info" @click="editItem(data)" />
-
-            <Button icon="pi pi-pencil" class="p-button-text" @click="editItem(data)" />
-            <Button icon="pi pi-trash" class="p-button-danger p-button-text" @click="" />
-            
-          </template>
-      </Column>
-    </DataTable>
-    </div>
-    <div>
-
-      <Dialog v-model:visible="dialogVisible" header="Create/Edit Pessoa" :closable="false">
-      <PessoaForm :formData="currentItem" :isEditing="isEditing" @save="saveItem" @cancel="closeDialog" />
-    </Dialog>
-
-      <!-- Button for Adding a New Item -->
-    </div>
-
+  </Column>
+      </DataTable>
   </div>
+
+  <ViewDialog 
+  :p
+  :header="isEditMode ? 'Edit Política' : 'View Política'" 
+  :visible="displayDialog" 
+  :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  @hide="displayDialog = false"
+  maximizable 
+  modal>
+      <div v-if="isEditMode">
+          <label for="codigo_politica">Código:</label>
+          <InputText id="codigo_politica" :v-model="selectedPolitica?.codigo_politica" :value="selectedPolitica?.codigo_politica" />            <p><strong>Código:</strong> {{ selectedPolitica?.id }} </p>
+          <label for="titulo_politica">Título:</label>
+          <InputText id="codigo_politica" :v-model="selectedPolitica?.titulo_politica" :value="selectedPolitica?.titulo_politica" />            <p><strong>Código:</strong> {{ selectedPolitica?.id }} </p>
+          <label for="codigo_politica">Código:</label>
+          <InputText id="codigo_politica"  />
+          <label for="titulo_politica">Documento:</label>
+          <InputText id="titulo_politica"  />
+          <label for="departamento">Departamento:</label>
+          <InputText id="departamento"  />
+          <!-- Add other fields as necessary -->
+      </div>
+      <div v-else>
+          <p><strong>Código:</strong> {{ selectedPolitica?.id }} </p>
+
+
+          
+          <p><strong>Código:</strong> {{ selectedPolitica?.id }} </p>
+          
+          <!-- Display other fields as necessary -->
+      </div>
+      <div class="flex justify-content-end">
+          <Button label="Cancel" icon="pi pi-times" @click="displayDialog = false" class="p-button-text" />
+          <Button label="Save" icon="pi pi-check" @click="savePolitica" v-if="isEditMode" />
+      </div>
+  </ViewDialog>
 </template>
 
 <script setup lang="ts">
-/*import { ref, onMounted } from 'vue';
-/*import { useAuthStore } from '@/stores/auth';*/
+import { Politica } from '@/models/Politica'; // Adjust the path as necessary
 
-import MenuHeader from '../components/MenuHeader.vue';
-
-import axios from "axios";
-import { useAuthStore } from '@/stores/auth';
-import { FilterMatchMode } from '@primevue/core/api';
+import MenuHeader from '@/components/MenuHeader.vue';
+import ViewDialog from '@/components/ViewDialog.vue';
 import { ref, onMounted } from 'vue';
-import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import Button from 'primevue/button';
+import Button from 'primevue/button'; // Importa o componente Button
 import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
+import InputIcon from 'primevue/inputicon';
+import { useAuthStore } from '@/stores/auth';
+import  DocumentosServices  from '@/services/indexDocumentos';
+import DataTable from 'primevue/datatable';
 
-// Define types for the items
+import { FilterMatchMode } from '@primevue/core/api';
 
-const loading = ref(true);
-
-
-interface Equipe {
-  id: number;
-  nome: string;
-
-}
-
+const loading = ref(true); // Add loading state
 const auth = useAuthStore();
 
-// State variables
-const equipe = ref();
-const dialogVisible = ref(false);
-const isEditing = ref(false);
-const currentItem = ref<Equipe>({
-  id: 0,
-  nome: ''
-});
-
 const filters = ref({
-  'nome': { value: null, matchMode: FilterMatchMode.CONTAINS },
- 
+'codigo_politica': { value: null, matchMode: FilterMatchMode.CONTAINS },
+'titulo_politica' : { value: null, matchMode: FilterMatchMode.CONTAINS},
+'departamento': { value: null, matchMode: FilterMatchMode.CONTAINS }, 
+'texto_politica': { value: null, matchMode: FilterMatchMode.CONTAINS} // Add this for email filtering
 
-});
+});//const filterMode = ref({ label: 'Lenient', value: 'lenient' });
+const politicas = ref<Politica[]>([]);
 
-const options = {
-  method: 'GET',
-  url: 'http://localhost:8000/atendimento/api/equipe/',
-  headers: {
-    'Content-Type': 'application/json',
-    'User-Agent': 'insomnia/10.0.0',
-    Authorization: 'TOKEN ' + auth.token
-  }
+const displayDialog = ref(false); // For dialog visibility
+const isEditMode = ref(false); // To track if in edit mode
+const selectedPolitica = ref<Politica | null>(null);
+
+
+const viewPolitica = (politica: Politica) => {
+  selectedPolitica.value = politica;
+  isEditMode.value = false;
+  displayDialog.value = true; // Show the dialog
 };
 
-function saveItem() {
+// Method to edit the selected política
+const editPolitica = (politica: Politica) => {
+  selectedPolitica.value = { ...politica }; // Copy the data to allow editing
+  isEditMode.value = true;
+  displayDialog.value = true; // Show the dialog
+};
 
+// Method to save the edited política
+const savePolitica = async () => {
+  if (isEditMode.value) {
+      // Call your update API method here, e.g., DocumentosServices.updatePolitica(auth.token, selectedPolitica.value);
+      console.log('Saving edited Politica:', selectedPolitica.value);
+  } else {
+      // Just for viewing, you might want to handle this differently
+      console.log('Viewing Politica:', selectedPolitica.value);
+  }
+  displayDialog.value = false; // Close the dialog
+};
+
+onMounted(async () => {
+  try {
+      const documentosData = await DocumentosServices.getPoliticas(auth.token);
+      politicas.value = documentosData.map((item: any) => new Politica(item)); // Create instances of Politica
+      console.log(documentosData)
+      console.log(politicas)
+
+  } catch (error) {
+      console.error("Failed to load documentos:", error);
+  } finally {
+      loading.value = false; // Set loading to false after the data is loaded
 }
-
-
-function editItem(item: Equipe) {
-  currentItem.value = { ...item };
-  isEditing.value = true;
-  dialogVisible.value = true;
-}
-
-function openNew() {
-
-}
-
-
-function closeDialog() {
-  dialogVisible.value = false;
-}
-axios.request(options).then(function (response) {
-  console.log(response.data);
-  console.log(auth.token);
-
-  onMounted(equipe.value = response.data);
-  loading.value = false;
-  console.log(equipe.value);
-
-}).catch(function (error) {
-  console.log('erro maximo');
-  console.error(error);
-  console.log(auth.token);
 });
+
+
+
 
 </script>
 
-
-
-<style scoped>
-.dialog-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.dashboard {
-  min-height: 100vh;
-  /* Garante que o fundo cubra a altura completa da janela */
-  padding: 10px;
-  background-image: url(../assets/background.png);
-  background-repeat: repeat;
-  /* Repetir em ambas direções */
-  background-size: cover;
-  /* O fundo cobre a área visível */
-  background-attachment: fixed;
-  /* Mantém o fundo fixo enquanto o conteúdo rola */
-}
-</style>

@@ -8,6 +8,8 @@ import IndexAtendimento from '@/views/atendimento/IndexAtendimento.vue';
 import IndexDocumentos from '@/views/documentos/IndexDocumentos.vue';
 import OrganogramaEmpresarial from '@/views/empresa/OrganogramaEmpresarial.vue';
 import CadastroPoliticas from '@/views/documentos/CadastroPoliticas.vue';
+import CadastroProcedimentoPadrao from '@/views/documentos/CadastroProcedimentoPadrao.vue';
+import EquipesAtendimento from '@/views/atendimento/EquipesAtendimento.vue';
 
 const routes = [
   {
@@ -47,6 +49,14 @@ const routes = [
   },
 
   {
+    path: '/pops',
+    name: 'ProcedimentoPadrao',
+    component: CadastroProcedimentoPadrao,
+    meta: { requiresAuth: true, title: 'MS Enterprise - POP' },
+    
+  },
+
+  {
     path: '/departamentos',
     name: 'Departamentos',
     component: OrganogramaEmpresarial,
@@ -54,6 +64,13 @@ const routes = [
     
   },
 
+  {
+    path: '/equipes',
+    name: 'Equipes',
+    component: EquipesAtendimento,
+    meta: { requiresAuth: true, title: 'MS Enterprise - Organograma' },
+    
+  },
   {
     path: '/guia',
     name: 'Guia Inicial',

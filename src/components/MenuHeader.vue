@@ -89,12 +89,12 @@ const router = useRouter();
             route: '/atendimento',
             items: [ 
           {
-            label: 'Equipe',
+            label: 'Equipes',
             icon: 'pi pi-users',
-            route: '/equipe'
+            route: '/equipes'
           },          
           {
-            label: 'Tipo de Atendimento',
+            label: 'Tipos de Atendimento',
             icon: 'pi pi-tags'
           },
           
@@ -137,10 +137,12 @@ const router = useRouter();
             items: [ {
               label: 'Usuários',
               icon: 'pi pi-users',
+              route: '/usuarios'
             },
             {
               label: 'Permissões',
               icon: 'pi pi-unlock',
+              route: '/permissoes'
             },
           ]
             
