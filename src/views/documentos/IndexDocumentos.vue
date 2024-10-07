@@ -52,8 +52,8 @@ import Button from 'primevue/button'; // Importa o componente Button
 import IconField from 'primevue/iconfield';
 import InputText from 'primevue/inputtext';
 import InputIcon from 'primevue/inputicon';
-import { useAuthStore } from '@/stores/auth';
-import DocumentosService from '@/services/indexDocumentos';
+import { useAuthStore } from '@/store/auth';
+import DocumentosService from '@/api/services/indexDocumentos';
 
 
 

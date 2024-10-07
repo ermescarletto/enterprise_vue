@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
-import { PessoaFisica } from '@/services/pessoasFisicas';
+import { PessoaFisica } from '@/api/services/pessoasFisicas';
 const props = defineProps({
   formData: PessoaFisica,
   isEditing: Boolean,

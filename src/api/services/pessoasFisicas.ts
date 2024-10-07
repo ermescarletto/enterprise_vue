@@ -1,6 +1,6 @@
 // pessoaService.ts
 import axios from 'axios';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/store/auth';
 const auth = useAuthStore();
 
 const API_URL = 'http://localhost:8000/cadastros/api/pessoasfisicas/';

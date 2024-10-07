@@ -82,8 +82,8 @@ import Button from 'primevue/button'; // Importa o componente Button
 import IconField from 'primevue/iconfield';
 import InputText from 'primevue/inputtext';
 import InputIcon from 'primevue/inputicon';
-import { useAuthStore } from '@/stores/auth';
-import  DocumentosServices  from '@/services/indexDocumentos';
+import { useAuthStore } from '@/store/auth';
+import  DocumentosServices  from '@/api/services/indexDocumentos';
 import DataTable from 'primevue/datatable';
 import Dialog from 'primevue/dialog';
 

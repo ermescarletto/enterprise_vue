@@ -39,7 +39,6 @@
   </div>
 
   <ViewDialog 
-  :p
   :header="isEditMode ? 'Edit Política' : 'View Política'" 
   :visible="displayDialog" 
   :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
@@ -63,7 +62,7 @@
           <p><strong>Código:</strong> {{ selectedPolitica?.id }} </p>
 
 
-          
+
           <p><strong>Código:</strong> {{ selectedPolitica?.id }} </p>
           
           <!-- Display other fields as necessary -->
@@ -86,8 +85,8 @@ import Button from 'primevue/button'; // Importa o componente Button
 import IconField from 'primevue/iconfield';
 import InputText from 'primevue/inputtext';
 import InputIcon from 'primevue/inputicon';
-import { useAuthStore } from '@/stores/auth';
-import  DocumentosServices  from '@/services/indexDocumentos';
+import { useAuthStore } from '@/store/auth';
+import  DocumentosServices  from '@/api/services/indexDocumentos';
 import DataTable from 'primevue/datatable';
 
 import { FilterMatchMode } from '@primevue/core/api';

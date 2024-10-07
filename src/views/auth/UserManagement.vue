@@ -103,7 +103,7 @@
 import MenuHeader from '@/components/MenuHeader.vue';
 
 import axios from "axios";
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/store/auth';
 import { FilterMatchMode } from '@primevue/core/api';
 import { ref, onMounted } from 'vue';
 import DataTable from 'primevue/datatable';
