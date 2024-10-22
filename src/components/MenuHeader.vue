@@ -40,8 +40,8 @@ import Badge from 'primevue/badge';
 import Button from 'primevue/button';
 
 
-const meuschamados = ref(3);
-const meusatendimentos = ref(2);
+const meuschamados = ref(123);
+const meusatendimentos = ref(32);
 const somaBadgeChamados = meuschamados.value + meusatendimentos.value;
 const authStore = useAuthStore();
 const router = useRouter();
@@ -63,15 +63,19 @@ const router = useRouter();
             icon: 'pi pi-ticket',
             items: [ 
           {
+            label: 'Cidades',
+            icon: 'pi pi-user',
+            route: '/cadastros/cidades'
+          },
+          {
             label: 'Endereços',
             icon: 'pi pi-map-marker',
-            route: 'enderecos'
+            route: '/cadastros/enderecos'
           },          
           {
             label: 'Pessoa Física',
             icon: 'pi pi-user',
-            route: 'pessoafisica'
-
+            route: '/cadastros/pessoas'
           },
           
           {
@@ -232,7 +236,7 @@ const router = useRouter();
 
     const logout = () => {
       authStore.logout();
-      router.push({ name: 'Login' });
+      router.push('/auth/login');
     };
 
   

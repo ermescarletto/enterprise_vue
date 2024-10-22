@@ -1,38 +1,85 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '@/views/LoginUser.vue';
+import { useAuthStore } from '@/store/auth'; // Store para controle de autenticação
+
 import Dashboard from '@/views/DashboardFront.vue';
 import GuiaInicial from '@/views/GuiaInicial.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
-import PessoaFisica from '@/views/PessoaFisica.vue';
 import IndexAtendimento from '@/views/atendimento/IndexAtendimento.vue';
 import IndexDocumentos from '@/views/documentos/IndexDocumentos.vue';
 import OrganogramaEmpresarial from '@/views/empresa/OrganogramaEmpresarial.vue';
 import CadastroPoliticas from '@/views/documentos/CadastroPoliticas.vue';
 import CadastroProcedimentoPadrao from '@/views/documentos/CadastroProcedimentoPadrao.vue';
 import EquipesAtendimento from '@/views/atendimento/EquipesAtendimento.vue';
+import LoginUser from '@/views/auth/LoginUser.vue';
+import AuthLayout from '@/layouts/AuthLayout.vue';
+import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+import PrivateLayout from '@/layouts/PrivateLayout.vue'
+import rotasCadastros from '@/modules/cadastros/routes';
 
 const routes = [
   {
     path: '/',
-    name: 'Login',
-    component: Login,
-    meta: { title: 'MS Enterprise - Login'}
-    
+    redirect: () => {
+      const authStore = useAuthStore();
+      return authStore.isAuthenticated ? '/dashboard' : '/auth/login';
+    },
+    children: [
+      {
+        path: 'dashboard',
+        nome: 'Dashboard',
+        meta: { requiresAuth: true, title: 'MS Enterprise - Dashboard' },
+        component: Dashboard
+      },
+      {
+        path: 'cadastros',
+        name: 'Cadastros',
+        beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+          const authStore = useAuthStore();
+          if (authStore.isAuthenticated) {
+            next(); // Redirect to dashboard if authenticated
+          } else {
+            next('/auth/login'); // Allow access to /auth if not authenticated
+          }
+        },
+        component: PrivateLayout,
+        meta: { requiresAuth: true, title: 'MS Enterprise - Pessoa Física' },
+        children: [
+          ...rotasCadastros, // Rotas dinâmicas do módulo de Pessoas
+        ],
+
+      },
+      {
+        path: 'atendimento',
+        name: 'Atendimento',
+        meta: { requiresAuth: true, title: 'MS Enterprise - Atendimento' },
+        component: IndexAtendimento,
+        children: [
+
+        ]
+      },
+    ]
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Dashboard' },
-    
+    path: '/auth',
+    component: AuthLayout,
+    beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      const authStore = useAuthStore();
+      if (authStore.isAuthenticated) {
+        next('/dashboard'); // Redirect to dashboard if authenticated
+      } else {
+        next(); // Allow access to /auth if not authenticated
+      }
+    },
+    children: [
+      {
+        path: 'login',
+        nome: 'Login',
+        component: LoginUser
+      }
+    ]
+
   },
-  {
-    path: '/atendimento',
-    name: 'Atendimento',
-    component: IndexAtendimento,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Atendimento' },
-    
-  },
+  
   {
     path: '/documentos',
     name: 'Documentos',
@@ -77,12 +124,7 @@ const routes = [
     component: GuiaInicial,
     meta: { requiresAuth: true, title: 'MS Enterprise - Guia' },
   },
-  {
-    path: '/pessoafisica',
-    name: 'Pessoa Física',
-    component: PessoaFisica,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Pessoa Física' },
-  },
+
   
   { path: '/:pathMatch(.*)*', 
     name: 'NotFound', 

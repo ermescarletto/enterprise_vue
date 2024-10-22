@@ -1,8 +1,6 @@
 <template>
-    <MenuHeader></MenuHeader>
     <div class="card">
-
-    
+   
     <DataTable v-model:filters="filters" :value="pessoas" paginator :rows="10" dataKey="id" filterDisplay="row"
       :loading="loading" :globalFilterFields="['nome', 'email', 'telefone', 'cpf']" class="mt-2" showGridlines stripedRows
       removableSort>
@@ -79,7 +77,7 @@
             <Button icon="pi pi-search" class="p-button-text p-button-info" @click="editItem(data)" />
 
             <Button icon="pi pi-pencil" class="p-button-text" @click="editItem(data)" />
-            <Button icon="pi pi-trash" class="p-button-danger p-button-text" @click="deleteItem(data.id)" />
+            <Button icon="pi pi-trash" class="p-button-danger p-button-text" />
             
           </template>
       </Column>
@@ -97,10 +95,6 @@
 </template>
 
 <script setup lang="ts">
-/*import { ref, onMounted } from 'vue';
-/*import { useAuthStore } from '@/stores/auth';*/
-
-import MenuHeader from '../components/MenuHeader.vue';
 
 import axios from "axios";
 import { useAuthStore } from '@/store/auth';
