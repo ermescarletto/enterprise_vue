@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { Politica } from '@/models/Politica'; // Adjust the path as necessary
+import { Politica } from '@/modules/documentos/models/Politica'; // Adjust the path as necessary
 
 import MenuHeader from '@/components/MenuHeader.vue';
 import ViewDialog from '@/components/ViewDialog.vue';

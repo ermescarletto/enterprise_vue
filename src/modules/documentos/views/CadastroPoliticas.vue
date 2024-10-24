@@ -1,6 +1,6 @@
 <template>
-    <MenuHeader></MenuHeader>
-    <div class="card mt-2">
+
+<div class="card mt-2">
 
 
         <DataTable v-model:filters="filters" :value="politicas" paginator :rows="10" dataKey="id" filterDisplay="row"
@@ -73,9 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { Politica } from '@/models/Politica'; // Adjust the path as necessary
-
-import MenuHeader from '@/components/MenuHeader.vue';
+import { Politica } from '@/modules/documentos/models/Politica'; // Adjust the path as necessary
 import { ref, onMounted } from 'vue';
 import Column from 'primevue/column';
 import Button from 'primevue/button'; // Importa o componente Button
@@ -130,108 +128,7 @@ const savePolitica = async () => {
     }
     displayDialog.value = false; // Close the dialog
 };
-/*
 
-const NodeService = {
-    getTreeNodesData() {
-        return [
-        ];
-    },
-
-    getTreeTableNodesData() {
-        return [
-            {
-                key: '0',
-                data: {
-                    codigo: 'MS-PB-001',
-                    nome: 'Política de Benefícios',
-                    departamento: 'Recursos Humanos',
-                    anexo: '/arquivo.pdf',
-                },
-                children: [
-                    {
-                        key: '0-0',
-                        data: {
-                            codigo: 'MS-PB-001',
-                            nome: 'Solicitação de Benefício',
-                            departamento: 'Recursos Humanos',
-                            anexo: '/arquivo.pdf',
-                        },
-                        children: [
-                            {
-                                key: '0-0-0',
-                                data: {
-                                    codigo: 'MS-PB-001',
-                                    nome: 'Fluxograma de Processo',
-                                    departamento: 'Recursos Humanos',
-                                    anexo: '/arquivo.pdf',
-                                },
-                            },
-                        ],
-                    },
-                ],
-            },{
-                key: '1',
-                data: {
-                    codigo: 'MS-PR-001',
-                    nome: 'Política de Reembolso',
-                    departamento: 'Financeiro',
-                    anexo: '/arquivo.pdf',
-                },
-                children: [
-                    {
-                        key: '1-0',
-                        data: {
-                            codigo: 'MS-PR-POP-001',
-                            nome: 'POP - Solicitar Reembolso',
-                            departamento: 'Financeiro',
-                            anexo: '/arquivo.pdf',
-                        },
-                        children: [
-                            {
-                                key: '1-0-0',
-                                data: {
-                                    codigo: 'MS-PR-FLX-001',
-                                    nome: 'Fluxograma do Processo de Reembolso',
-                                    departamento: 'Financeiro',
-                                    anexo: '/arquivo.pdf',
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        key: '1-1',
-                        data: {
-                            codigo: 'MS-PR-POP-002',
-                            nome: 'POP - Solicitar Adiantamento',
-                            departamento: 'Financeiro',
-                            anexo: '/arquivo.pdf',
-                        },
-                        children: [
-                            {
-                                key: '1-0-0',
-                                data: {
-                                    codigo: 'MS-PR-FLX-002',
-                                    nome: 'Fluxograma do Processo de Adiantamento',
-                                    departamento: 'Financeiro',
-                                    anexo: '/arquivo.pdf',
-                                },
-                            },
-                        ],
-                    },
-                ],
-            },
-        ];
-    },
-
-    getTreeTableNodes() {
-        return Promise.resolve(this.getTreeTableNodesData());
-    },
-
-    getTreeNodes() {
-        return Promise.resolve(this.getTreeNodesData());
-    }
-};*/
 onMounted(async () => {
     try {
         const documentosData = await DocumentosServices.getPoliticas(auth.token);

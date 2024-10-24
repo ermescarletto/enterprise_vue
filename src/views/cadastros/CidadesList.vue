@@ -192,10 +192,8 @@ function closeDialog() {
 }
 axios.request(options).then(function (response) {
   console.log(response.data);
-
   onMounted(cidades.value = response.data);
   loading.value = false;
-
 }).catch(function (error) {
   console.log('erro maximo');
   console.error(error);

@@ -1,5 +1,4 @@
 <template>
-    <MenuHeader></MenuHeader>
     <div class="card mt-2">
 
 
@@ -73,9 +72,9 @@
 </template>
 
 <script setup lang="ts">
-import { Politica } from '@/models/Politica'; // Adjust the path as necessary
+import { Politica } from '@/modules/documentos/models/Politica'; // Adjust the path as necessary
 
-import MenuHeader from '@/components/MenuHeader.vue';
+
 import { ref, onMounted } from 'vue';
 import Column from 'primevue/column';
 import Button from 'primevue/button'; // Importa o componente Button

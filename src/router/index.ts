@@ -5,17 +5,14 @@ import Dashboard from '@/views/DashboardFront.vue';
 import GuiaInicial from '@/views/GuiaInicial.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import IndexAtendimento from '@/views/atendimento/IndexAtendimento.vue';
-import IndexDocumentos from '@/views/documentos/IndexDocumentos.vue';
 import OrganogramaEmpresarial from '@/views/empresa/OrganogramaEmpresarial.vue';
-import CadastroPoliticas from '@/views/documentos/CadastroPoliticas.vue';
-import CadastroProcedimentoPadrao from '@/views/documentos/CadastroProcedimentoPadrao.vue';
 import EquipesAtendimento from '@/views/atendimento/EquipesAtendimento.vue';
 import LoginUser from '@/views/auth/LoginUser.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 import PrivateLayout from '@/layouts/PrivateLayout.vue'
 import rotasCadastros from '@/modules/cadastros/routes';
-
+import rotasDocumentos from '@/modules/documentos/routes';
 const routes = [
   {
     path: '/',
@@ -45,6 +42,25 @@ const routes = [
         meta: { requiresAuth: true, title: 'MS Enterprise - Pessoa Física' },
         children: [
           ...rotasCadastros, // Rotas dinâmicas do módulo de Pessoas
+        ],
+
+      },
+      
+      {
+        path: 'documentos',
+        name: 'Documentos',
+        beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+          const authStore = useAuthStore();
+          if (authStore.isAuthenticated) {
+            next(); // Redirect to dashboard if authenticated
+          } else {
+            next('/auth/login'); // Allow access to /auth if not authenticated
+          }
+        },
+        component: PrivateLayout,
+        meta: { requiresAuth: true, title: 'MS Enterprise - Documentos' },
+        children: [
+          ...rotasDocumentos, // Rotas dinâmicas do módulo de Pessoas
         ],
 
       },
@@ -80,28 +96,6 @@ const routes = [
 
   },
   
-  {
-    path: '/documentos',
-    name: 'Documentos',
-    component: IndexDocumentos,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Documentos' },
-    
-  },
-  {
-    path: '/politicas',
-    name: 'Politicas',
-    component: CadastroPoliticas,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Políticas' },
-    
-  },
-
-  {
-    path: '/pops',
-    name: 'ProcedimentoPadrao',
-    component: CadastroProcedimentoPadrao,
-    meta: { requiresAuth: true, title: 'MS Enterprise - POP' },
-    
-  },
 
   {
     path: '/departamentos',

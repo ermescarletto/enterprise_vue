@@ -169,7 +169,7 @@ const router = useRouter();
             {
                 label: 'Políticas',
                 icon: 'pi pi-bolt',
-                route: '/politicas'
+                route: '/documentos/politicas'
             },
             {
                 separator: true
@@ -177,7 +177,7 @@ const router = useRouter();
             {
                 label: 'Procedimento Padrão',
                 icon: 'pi pi-server',
-                route: '/pops'
+                route: '/documentos/pops'
             },
             {
                 separator: true

@@ -1,5 +1,4 @@
 <template>
-    <MenuHeader></MenuHeader>
 
     <div class="card mt-2">
         
@@ -14,7 +13,7 @@
         :loading="loading">
             <template #header>
                 <div class="flex justify-content-between flex-wrap">
-                    <div class="text-xl font-bold">Documentos</div>
+                    <div class="text-xl font-bold">Documentos Normativos</div>
 
             <IconField>
                 <InputIcon class="pi pi-search" />
@@ -44,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import MenuHeader from '@/components/MenuHeader.vue';
 import { ref, onMounted } from 'vue';
 import TreeTable from 'primevue/treetable';
 import Column from 'primevue/column';
