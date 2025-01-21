@@ -94,11 +94,10 @@ const filters = ref({
   'codigo_politica': { value: null, matchMode: FilterMatchMode.CONTAINS },
   'titulo_politica' : { value: null, matchMode: FilterMatchMode.CONTAINS},
   'departamento': { value: null, matchMode: FilterMatchMode.CONTAINS }, 
-  'texto_politica': { value: null, matchMode: FilterMatchMode.CONTAINS} // Add this for email filtering
+  'texto_politica': { value: null, matchMode: FilterMatchMode.CONTAINS} 
 
 });//const filterMode = ref({ label: 'Lenient', value: 'lenient' });
 const politicas = ref<Politica[]>([]);
-
 const displayDialog = ref(false); // For dialog visibility
 const isEditMode = ref(false); // To track if in edit mode
 const selectedPolitica = ref<Politica | null>(null);

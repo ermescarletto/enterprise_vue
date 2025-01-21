@@ -7,20 +7,38 @@ import PageNotFound from '@/views/PageNotFound.vue';
 import IndexAtendimento from '@/views/atendimento/IndexAtendimento.vue';
 import OrganogramaEmpresarial from '@/views/empresa/OrganogramaEmpresarial.vue';
 import EquipesAtendimento from '@/views/atendimento/EquipesAtendimento.vue';
-import LoginUser from '@/views/auth/LoginUser.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 import PrivateLayout from '@/layouts/PrivateLayout.vue'
 import rotasCadastros from '@/modules/cadastros/routes';
 import rotasDocumentos from '@/modules/documentos/routes';
+import rotasAutenticacao from '@/modules/users/routes';
+import rotasDashboards from '@/modules/dashboards/routes';
+
 const routes = [
   {
     path: '/',
     redirect: () => {
       const authStore = useAuthStore();
-      return authStore.isAuthenticated ? '/dashboard' : '/auth/login';
+      return authStore.isAuthenticated ? 'dashboard' : '/auth/login';
     },
     children: [
+      {
+        path: 'auth',
+        component: AuthLayout,
+        beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+          const authStore = useAuthStore();
+          if (authStore.isAuthenticated) {
+            next('/dashboard'); // Redirect to dashboard if authenticated
+          } else {
+            next(); // Allow access to /auth if not authenticated
+          }
+        },
+        children: [
+        ...rotasAutenticacao,
+        ]
+    
+      },
       {
         path: 'dashboard',
         nome: 'Dashboard',
@@ -65,6 +83,23 @@ const routes = [
 
       },
       {
+        path: 'bi',
+        name: 'BI',
+        beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+          const authStore = useAuthStore();
+          if (authStore.isAuthenticated) {
+            next(); // Redirect to dashboard if authenticated
+          } else {
+            next('/auth/login'); // Allow access to /auth if not authenticated
+          }
+        },
+        meta: { requiresAuth: true, title: 'MS Enterprise - BI' },
+        children: [
+          ...rotasDashboards, // Rotas dinâmicas do módulo de Pessoas
+        ],
+
+      },
+      {
         path: 'atendimento',
         name: 'Atendimento',
         meta: { requiresAuth: true, title: 'MS Enterprise - Atendimento' },
@@ -75,26 +110,7 @@ const routes = [
       },
     ]
   },
-  {
-    path: '/auth',
-    component: AuthLayout,
-    beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      const authStore = useAuthStore();
-      if (authStore.isAuthenticated) {
-        next('/dashboard'); // Redirect to dashboard if authenticated
-      } else {
-        next(); // Allow access to /auth if not authenticated
-      }
-    },
-    children: [
-      {
-        path: 'login',
-        nome: 'Login',
-        component: LoginUser
-      }
-    ]
-
-  },
+  
   
 
   {

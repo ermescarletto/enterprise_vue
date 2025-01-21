@@ -50,11 +50,11 @@
         </form>
         <div class="flex justify-content-center">
         <Button label="Login" icon="pi pi-lock" @click="handleLogin" class="m-2" iconPos="left" />
-        <!-- <Button label="Registrar" icon="pi pi-plus" class="m-2" severity="info" iconPos="left" /> -->
+        <Button label="Registrar" icon="pi pi-plus"  @click="router.push('register')" class="m-2" severity="info" iconPos="left" />
       </div>
 
       <div class="flex justify-content-center text-xs">
-        <a @click="forgotPassword">Recuperar minha senha</a>
+                <a @click="forgotPassword">Recuperar minha senha</a>
       </div>
       </div>
     </template>

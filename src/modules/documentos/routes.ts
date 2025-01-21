@@ -4,7 +4,7 @@ import CadastroPoliticas from './views/CadastroPoliticas.vue';
 import CadastroProcedimentoPadrao from './views/CadastroProcedimentoPadrao.vue';
 export default [
   {
-    path: '',
+    path: 'docs',
     name: 'Documentos',
     component: IndexDocumentos,
     meta: { requiresAuth: true, title: 'MS Enterprise - Documentos' },

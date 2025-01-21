@@ -1,8 +1,7 @@
 
 <template>
       <div class="dashboard">
-
-    <router-view/>
+      <router-view/>
       </div>
 </template>
 
@@ -10,8 +9,6 @@
 
 
 <style>
-
-
 .dashboard {
   min-height: 100vh;
   /* Garante que o fundo cubra a altura completa da janela */
@@ -24,5 +21,4 @@
   background-attachment: fixed;
   /* Mantém o fundo fixo enquanto o conteúdo rola */
 }
-
 </style>

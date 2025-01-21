@@ -17,8 +17,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(@/assets/background.png);
-  background-size: cover;
 }
 
 </style>

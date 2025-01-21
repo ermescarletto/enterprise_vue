@@ -40,9 +40,9 @@ import Badge from 'primevue/badge';
 import Button from 'primevue/button';
 
 
-const meuschamados = ref(123);
-const meusatendimentos = ref(32);
-const somaBadgeChamados = meuschamados.value + meusatendimentos.value;
+//const meuschamados = ref(123);
+//const meusatendimentos = ref(32);
+//const somaBadgeChamados = meuschamados.value + meusatendimentos.value;
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -58,7 +58,7 @@ const router = useRouter();
         label: 'Cadastros',
         icon: 'pi pi-book',
         items: [ {
-            
+
         label: 'Cadastro Único',
             icon: 'pi pi-ticket',
             items: [ 
@@ -152,7 +152,45 @@ const router = useRouter();
             
           },
         ]
-    }, 
+    },
+    
+    {
+        label: 'Dashboards',
+        icon: 'pi pi-book',
+        items: [ {
+
+        label: 'Visões Gerais',
+            icon: 'pi pi-chart-scatter',
+            route: '/bi/dashboards'
+
+          },
+          {
+                separator: true
+            },     
+            {
+
+label: 'Minhas Visões',
+    icon: 'pi pi-gauge',
+    items: [ 
+      {
+        label: 'Unidade 1',
+        icon: 'pi pi-building-columns',
+        route: '/cadastros/cidades'
+      },
+      {
+        label: 'Unidade 2',
+        icon: 'pi pi-building-columns',
+        route: '/cadastros/cidades'
+      },
+]
+  },  
+             
+        
+        ]
+    },
+   
+             /*
+    
     {
         label: 'Documentos',
         icon: 'pi pi-bookmark-fill',
@@ -231,9 +269,9 @@ const router = useRouter();
                 icon: 'pi pi-chart-bar',
             }],
         badge: somaBadgeChamados
-    }]);
+    }*/]);
 
-
+    
     const logout = () => {
       authStore.logout();
       router.push('/auth/login');
