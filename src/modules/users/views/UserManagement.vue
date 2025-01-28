@@ -1,5 +1,4 @@
 <template>
-    <MenuHeader></MenuHeader>
     <div class="card">
 
     
@@ -100,7 +99,7 @@
 /*import { ref, onMounted } from 'vue';
 /*import { useAuthStore } from '@/stores/auth';*/
 
-import MenuHeader from '@/components/MenuHeader.vue';
+//import MenuHeader from '@/components/MenuHeader.vue';
 
 import axios from "axios";
 import { useAuthStore } from '@/store/auth';

@@ -20,7 +20,7 @@ const routes = [
     path: '/',
     redirect: () => {
       const authStore = useAuthStore();
-      return authStore.isAuthenticated ? 'dashboard' : '/auth/login';
+      return authStore.isAuthenticated ? '/' : '/auth/login';
     },
     children: [
       {
@@ -29,7 +29,7 @@ const routes = [
         beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
           const authStore = useAuthStore();
           if (authStore.isAuthenticated) {
-            next('/dashboard'); // Redirect to dashboard if authenticated
+            next('/'); // Redirect to home if authenticated
           } else {
             next(); // Allow access to /auth if not authenticated
           }
@@ -40,10 +40,17 @@ const routes = [
     
       },
       {
-        path: 'dashboard',
-        nome: 'Dashboard',
+        path: 'home',
+        name: 'Home',
         meta: { requiresAuth: true, title: 'MS Enterprise - Dashboard' },
-        component: Dashboard
+        component: PrivateLayout,
+        children: [
+          {
+            path: '/',
+            component: Dashboard
+          }
+        ]
+        
       },
       {
         path: 'cadastros',

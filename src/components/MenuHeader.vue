@@ -1,5 +1,5 @@
 <template>
-<div class="header">
+<div class="">
     <Menubar :model="items">
           <template #start>
               <img src="../assets/logo.png" alt="logo" width="30px" @click="router.push('/dashboard')" />
@@ -45,14 +45,11 @@ import Button from 'primevue/button';
 //const somaBadgeChamados = meuschamados.value + meusatendimentos.value;
 const authStore = useAuthStore();
 const router = useRouter();
-
-
-
-  const items = ref([
+const items = ref([
     {
         label: 'Início',
         icon: 'pi pi-home',
-        route: 'dashboard'
+        route: '/'
     },
     {
         label: 'Cadastros',
@@ -87,7 +84,7 @@ const router = useRouter();
           },         {
                 separator: true
             },
-        {
+        /*{
             label: 'Atendimento',
             icon: 'pi pi-ticket',
             route: '/atendimento',
@@ -131,7 +128,7 @@ const router = useRouter();
             },
           ]
             
-          },
+          },*/
           {
                 separator: true
             },
@@ -141,12 +138,12 @@ const router = useRouter();
             items: [ {
               label: 'Usuários',
               icon: 'pi pi-users',
-              route: '/usuarios'
+              route: '/auth/users'
             },
             {
               label: 'Permissões',
               icon: 'pi pi-unlock',
-              route: '/permissoes'
+              route: '/auth/perms'
             },
           ]
             

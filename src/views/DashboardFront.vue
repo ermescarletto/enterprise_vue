@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard">
-    <MenuHeader></MenuHeader>
   <div class="bg-white p-5 bg-surface-0 dark:bg-surface-950 mt-5  px-6 py-20 md:px-12 lg:px-20">
         <div class="text-surface-700 dark:text-surface-100 text-center">
             <div class="text-primary font-bold mb-4"><img src="../assets/enterprise.png" width="300px"/> </div>
@@ -82,7 +81,6 @@ import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Chart from 'primevue/chart';
-import MenuHeader from '../components/MenuHeader.vue';
 
 const chartData = ref();
 const chartOptions = ref();

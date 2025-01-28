@@ -136,7 +136,7 @@ const handleLogin = async () => {
       rememberMe.value
         ? localStorage.setItem('rememberedEmail', email.value)
         : localStorage.removeItem('rememberedEmail');
-      router.push({ path: '/dashboard' });
+      router.push({ path: '/' });
     } else {
       throw new Error('Login inválido.');
     }
