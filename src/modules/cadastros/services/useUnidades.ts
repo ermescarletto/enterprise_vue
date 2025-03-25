@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/auth";
 
 export function useUnidades() {
   const auth = useAuthStore();
-  const unidades = ref([]);
+  const unidades = ref<[]>();
   const loadingUnidades = ref(false);
 
   const loadUnidades = async () => {
@@ -12,6 +12,7 @@ export function useUnidades() {
     const response = await axios.get("cadastros/api/unidade/", { headers: { Authorization: `TOKEN ${auth.token}` } });
     unidades.value = response.data;
     loadingUnidades.value = false;
+    return unidades.value;
   };
 
   return { unidades, loadingUnidades, loadUnidades };

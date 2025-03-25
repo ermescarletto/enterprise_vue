@@ -51,7 +51,7 @@
     </DataTable>
 
     <!-- Diálogo de Gerente -->
-    <GerenteDialog v-model:visible="dialogVisible.valueOf" :gerente="currentItem" @save="saveItem" />
+    <GerenteDialog v-model:visible="dialogVisible" :gerente="currentItem"  @save="saveItem" />
   </div>
 </template>
 
