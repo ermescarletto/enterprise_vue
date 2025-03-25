@@ -10,5 +10,4 @@
 <script setup lang="ts">
 import MenuHeader from '@/components/MenuHeader.vue';
 
-
 </script>

@@ -14,6 +14,7 @@ import rotasCadastros from '@/modules/cadastros/routes';
 import rotasDocumentos from '@/modules/documentos/routes';
 import rotasAutenticacao from '@/modules/users/routes';
 import rotasDashboards from '@/modules/dashboards/routes';
+import HomeFront from '@/modules/cms/views/HomeFront.vue';
 
 const routes = [
   {
@@ -42,35 +43,26 @@ const routes = [
       {
         path: 'home',
         name: 'Home',
-        meta: { requiresAuth: true, title: 'MS Enterprise - Dashboard' },
+        meta: { requiresAuth: true, title: 'MS Enterprise - Início' },
         component: PrivateLayout,
         children: [
           {
             path: '/',
-            component: Dashboard
-          }
+            component: HomeFront
+          },
+          {
+            path: '/cadastros',
+            name: 'Cadastros',
+            children: [
+              ...rotasCadastros, // Rotas dinâmicas do módulo de Pessoas
+            ],
+    
+          },
+    
         ]
         
       },
-      {
-        path: 'cadastros',
-        name: 'Cadastros',
-        beforeEnter: (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-          const authStore = useAuthStore();
-          if (authStore.isAuthenticated) {
-            next(); // Redirect to dashboard if authenticated
-          } else {
-            next('/auth/login'); // Allow access to /auth if not authenticated
-          }
-        },
-        component: PrivateLayout,
-        meta: { requiresAuth: true, title: 'MS Enterprise - Pessoa Física' },
-        children: [
-          ...rotasCadastros, // Rotas dinâmicas do módulo de Pessoas
-        ],
-
-      },
-      
+            
       {
         path: 'documentos',
         name: 'Documentos',

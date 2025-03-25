@@ -1,11 +1,18 @@
 <template>
-    <div class="card">
-
-    
-    <DataTable v-model:filters="filters" :value="pessoas" paginator :rows="10" dataKey="id" filterDisplay="row"
-      :loading="loading" :globalFilterFields="['nome', 'email', 'telefone', 'cpf']" class="mt-2" showGridlines stripedRows
-      removableSort>
-      <template #header>
+    <div class="card">   
+    <DataTable 
+    v-model:filters="filters" 
+    :value="usuarios" 
+    paginator :rows="10" 
+    dataKey="id" 
+    filterDisplay="row"
+    :loading="loading" :globalFilterFields="['username', 'email', 'cpf']" 
+    class="mt-2" 
+    showGridlines 
+    stripedRows
+    removableSort
+    >
+    <template #header>
         <div class="flex justify-content-between flex-wrap">
           <div class="m-2">
             <Button class="mt-2" label="Adicionar" icon="pi pi-plus" @click="openNew" />
@@ -111,52 +118,30 @@ import Button from 'primevue/button';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
-
+import { Usuario } from "../models/User";
 // Define types for the items
 
 const loading = ref(true);
-
-
-interface PessoaFisica {
-  id: number;
-  nome: string;
-  data_nascimento: string;
-  cpf: string;
-  sexo: string;
-  email: string;
-  telefone: string;
-}
-
 const auth = useAuthStore();
 
 // State variables
-const pessoas = ref();
+const usuarios = ref();
 const dialogVisible = ref(false);
 const isEditing = ref(false);
-const currentItem = ref<PessoaFisica>({
-  id: 0,
-  nome: '',
-  data_nascimento: '',
-  cpf: '',
-  sexo: '',
-  email: '',
-  telefone: '',
-});
+const isDelete = ref(false);
+const currentItem = ref<Usuario>();
 
 const filters = ref({
-  'nome': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'username': { value: null, matchMode: FilterMatchMode.CONTAINS },
   'cpf' : { value: null, matchMode: FilterMatchMode.CONTAINS},
   'email': { value: null, matchMode: FilterMatchMode.CONTAINS }, 
-  'telefone': { value: null, matchMode: FilterMatchMode.CONTAINS} // Add this for email filtering
-
 });
 
 const options = {
   method: 'GET',
-  url: 'http://localhost:8000/cadastros/api/pessoasfisicas/',
+  url: 'http://localhost:8000/auth/api/list/',
   headers: {
     'Content-Type': 'application/json',
-    'User-Agent': 'insomnia/10.0.0',
     Authorization: 'TOKEN ' + auth.token
   }
 };
@@ -166,7 +151,14 @@ function saveItem() {
 }
 
 
-function editItem(item: PessoaFisica) {
+function deleteItem(item: Usuario){
+  currentItem.value = { ...item };
+  isDelete.value = true;
+  dialogVisible.value = true;
+
+}
+
+function editItem(item: Usuario) {
   currentItem.value = { ...item };
   isEditing.value = true;
   dialogVisible.value = true;
@@ -177,6 +169,7 @@ function openNew() {
 }
 
 
+
 function closeDialog() {
   dialogVisible.value = false;
 }
@@ -184,9 +177,9 @@ axios.request(options).then(function (response) {
   console.log(response.data);
   console.log(auth.token);
 
-  onMounted(pessoas.value = response.data);
+  onMounted(usuarios.value = response.data);
   loading.value = false;
-  console.log(pessoas.value);
+  console.log(usuarios.value);
 
 }).catch(function (error) {
   console.log('erro maximo');

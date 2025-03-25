@@ -65,21 +65,20 @@ const items = ref([
             route: '/cadastros/cidades'
           },
           {
-            label: 'Endereços',
-            icon: 'pi pi-map-marker',
-            route: '/cadastros/enderecos'
-          },          
-          {
-            label: 'Pessoa Física',
-            icon: 'pi pi-user',
-            route: '/cadastros/pessoas'
+            label: 'Empresas',
+            icon: 'pi pi-building',
+            route: '/cadastros/empresas'
           },
-          
           {
-            label: 'Pessoa Jurídica',
-            icon: 'pi pi-building'
+            label: 'Unidades',
+            icon: 'pi pi-home',
+            route: '/cadastros/unidades'
           },
-        
+          {
+            label: 'Gerentes',
+            icon: 'pi pi-crown',
+            route: '/cadastros/gerentes'
+          },
         ]
           },         {
                 separator: true
@@ -128,10 +127,11 @@ const items = ref([
             },
           ]
             
-          },*/
+          },
           {
                 separator: true
             },
+            */
           {
             label: 'Autenticação',
             icon: 'pi pi-user',
@@ -154,8 +154,17 @@ const items = ref([
     {
         label: 'Dashboards',
         icon: 'pi pi-book',
-        items: [ {
+        items: [ 
+          {
+          label: 'Automações',
+            icon: 'pi pi-microchip-ai',
+            route: '/bi/dashboards'
 
+          },
+          {
+                separator: true
+            },    {
+              
         label: 'Visões Gerais',
             icon: 'pi pi-chart-scatter',
             route: '/bi/dashboards'
