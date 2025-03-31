@@ -158,7 +158,7 @@ const items = ref([
           {
           label: 'Automações',
             icon: 'pi pi-microchip-ai',
-            route: '/bi/dashboards'
+            route: '/bi/automacoes'
 
           },
           {
