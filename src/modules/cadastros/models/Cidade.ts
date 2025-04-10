@@ -1,27 +1,17 @@
-// Politica.ts
 export class Cidade {
-    id: number;
-    empresa: {
-        id: number;
-        nome: string;
-        pessoa_juridica: number;
-    };
-    departamento: {
-        id: number;
-        nome: string;
-    };
-    criado_em: string; // Consider using Date if you want to handle dates properly
-    codigo_politica: string;
-    titulo_politica: string;
-    texto_politica: string;
 
+        id: number;
+        nome: string;
+        estado: string;
+        cep_de: number;
+        cep_ate: number;
+        
+    
     constructor(data: any) {
         this.id = data.id;
-        this.empresa = data.empresa;
-        this.departamento = data.departamento;
-        this.criado_em = data.criado_em;
-        this.codigo_politica = data.codigo_politica;
-        this.titulo_politica = data.titulo_politica;
-        this.texto_politica = data.texto_politica;
+        this.nome = data.nome;
+        this.estado = data.estado;
+        this.cep_de = data.cep_de;
+        this.cep_ate = data.cep_ate;
     }
 }

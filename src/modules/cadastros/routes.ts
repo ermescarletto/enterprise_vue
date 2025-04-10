@@ -1,6 +1,6 @@
 
 import PessoaFisica from '@/views/cadastros/PessoaFisica.vue';
-import CidadesList from '@/views/cadastros/CidadesList.vue';
+import CidadesList from './views/CidadesList.vue';
 import PessoaJuridica from './views/PessoaJuridica.vue';
 import UnidadesList from './views/UnidadesList.vue';
 import GerentesList from './views/GerentesList.vue';
