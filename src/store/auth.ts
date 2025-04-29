@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -22,5 +21,12 @@ export const useAuthStore = defineStore('auth', {
   },
   getters: {
     isAuthenticated: (state) => !!state.token,
+    isSuperUser: (state) => state.user.is_superuser,
+    hasPermission: (state) => (permission: string) => {
+      if (state.user.is_superuser) {
+        return true;
+      }
+      return state.user.perms?.includes(permission);
+    },
   },
 });

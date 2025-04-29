@@ -17,6 +17,5 @@ export function useGerentes() {
   const deleteGerente = async (id: number) => {
     await axios.delete(`cadastros/api/gerente/${id}/`, { headers: { Authorization: `TOKEN ${auth.token}` } });
   };
-
   return { gerentes, loading, loadGerentes, deleteGerente };
 }

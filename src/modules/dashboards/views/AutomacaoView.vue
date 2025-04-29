@@ -1,4 +1,7 @@
-<script setup>
+<script setup lang="ts">
+import UnderConstruction from '@/components/UnderConstruction.vue';
+
+/*
 import { ref } from "vue";
 import api from "@/api/services/apiAxios";
 
@@ -31,14 +34,17 @@ const verificarStatus = async () => {
   } catch (error) {
     console.error("Erro ao verificar status:", error);
   }
-};
+};*/
 </script>
 
 <template>
+  <UnderConstruction />
   <div>
-    <button @click="iniciarProcesso">Iniciar Processo</button>
+<!-- 
+       <button @click="iniciarProcesso">Iniciar Processo</button>
     <p v-if="taskId">ID da Tarefa: {{ taskId }}</p>
     <p>Status: {{ status }}</p>
     <p v-if="resultado">Resultado: {{ resultado }}</p>
-  </div>
+ 
+  -->  </div>
 </template>

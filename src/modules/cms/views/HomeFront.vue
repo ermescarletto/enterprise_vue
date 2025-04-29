@@ -15,7 +15,7 @@
     <template #header>
       
     </template>
-    <template #title>Atendimentos por Área xxx</template>
+    <template #title>Atendimentos por Área</template>
     <template #subtitle>Chamados abertos por departamento</template>
     <template #content>
       <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full md:w-[30rem]" />
@@ -127,7 +127,7 @@ chartOptions.value =  setChartOptions();
 
 const pushGuia= () => {
 
-    router.push('guia');
+    router.push('/home/guia');
 
 };
 

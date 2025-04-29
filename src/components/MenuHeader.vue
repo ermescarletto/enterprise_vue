@@ -17,7 +17,7 @@
               <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary font-bold border-round m-2">
                   
                   <p>{{authStore.user.username}}</p>
-                
+                  
                 </div>
                 <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary font-bold border-round m-2">
                   <Button icon="pi pi-sign-out" @click="logout" rounded severity="secondary"/>
@@ -28,10 +28,9 @@
           </template>
   </Menubar>
 </div>
-</template>
-<script setup lang="ts">
+</template><script setup lang="ts">
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
 
@@ -39,249 +38,101 @@ import Menubar from 'primevue/menubar';
 import Badge from 'primevue/badge';
 import Button from 'primevue/button';
 
-
-//const meuschamados = ref(123);
-//const meusatendimentos = ref(32);
-//const somaBadgeChamados = meuschamados.value + meusatendimentos.value;
 const authStore = useAuthStore();
 const router = useRouter();
-const items = ref([
+const isTrue = ref(false);
+const items = ref<any[]>([]);
+
+function buildItems() {
+  isTrue.value = authStore.isSuperUser;
+
+  const menu = [
     {
-        label: 'Início',
-        icon: 'pi pi-home',
-        route: '/'
+      label: 'Início',
+      icon: 'pi pi-home',
+      route: '/'
     },
     {
-        label: 'Cadastros',
-        icon: 'pi pi-book',
-        items: [ {
-
-        label: 'Cadastro Único',
-            icon: 'pi pi-ticket',
-            items: [ 
-          {
-            label: 'Cidades',
-            icon: 'pi pi-user',
-            route: '/cadastros/cidades'
-          },
-          {
-            label: 'Empresas',
-            icon: 'pi pi-building',
-            route: '/cadastros/empresas'
-          },
-          {
-            label: 'Unidades',
-            icon: 'pi pi-home',
-            route: '/cadastros/unidades'
-          },
-          {
-            label: 'Gerentes',
-            icon: 'pi pi-crown',
-            route: '/cadastros/gerentes'
-          },
-        ]
-          },         {
-                separator: true
-            },
-        /*{
-            label: 'Atendimento',
-            icon: 'pi pi-ticket',
-            route: '/atendimento',
-            items: [ 
-          {
-            label: 'Equipes',
-            icon: 'pi pi-users',
-            route: '/equipes'
-          },          
-          {
-            label: 'Tipos de Atendimento',
-            icon: 'pi pi-tags'
-          },
-          
-        
-        ]
-          },
-          {
-                separator: true
-            },
-          {
-            label: 'Empresa',
-            icon: 'pi pi-home',
-            items: [ {
-              label: 'Empresa',
-              icon: 'pi pi-home',
-            },{
-            
-              label: 'Departamento',
-              icon: 'pi pi-sitemap',
-              route: '/departamentos'
+      label: 'Cadastros',
+      icon: 'pi pi-book',
+      items: isTrue.value
+        ? [
+            {
+              label: 'Cidades',
+              icon: 'pi pi-user',
+              route: '/cadastros/cidades'
             },
             {
-              label: 'Unidade',
+              label: 'Empresas',
               icon: 'pi pi-building',
+              route: '/cadastros/empresas'
             },
-            
             {
-              label: 'Cargos',
-              icon: 'pi pi-briefcase',
+              label: 'Unidades',
+              icon: 'pi pi-home',
+              route: '/cadastros/unidades'
             },
+            {
+              label: 'Gerentes',
+              icon: 'pi pi-crown',
+              route: '/cadastros/gerentes'
+            }
           ]
-            
-          },
-          {
-                separator: true
-            },
-            */
-          {
-            label: 'Autenticação',
-            icon: 'pi pi-user',
-            items: [ {
+        : []
+    },
+    {
+      label: 'Dashboards',
+      icon: 'pi pi-book',
+      items: isTrue.value
+      ? [
+        {
+          label: 'Automações',
+          icon: 'pi pi-microchip-ai',
+          route: '/bi/automacoes'
+        },
+        {
+          separator: true
+        },
+        {
+          label: 'Minhas Visões',
+          icon: 'pi pi-gauge',
+          items: isTrue.value
+            ? [
+                {
+                  label: 'Gerencial Realizado',
+                  icon: 'pi pi-building-columns',
+                  route: '/bi/dashboards'
+                },
+              ]
+            : []
+        }
+      ] : []
+    },
+    {
+      label: 'Autenticação',
+      icon: 'pi pi-user',
+      items: isTrue.value
+        ? [
+            {
               label: 'Usuários',
               icon: 'pi pi-users',
-              route: '/auth/users'
-            },
-            {
-              label: 'Permissões',
-              icon: 'pi pi-unlock',
-              route: '/auth/perms'
+              route: '/users'
             },
           ]
-            
-          },
-        ]
-    },
-    
-    {
-        label: 'Dashboards',
-        icon: 'pi pi-book',
-        items: [ 
-          {
-          label: 'Automações',
-            icon: 'pi pi-microchip-ai',
-            route: '/bi/automacoes'
+        : []
+    }
+  ];
 
-          },
-          {
-                separator: true
-            },    {
-              
-        label: 'Visões Gerais',
-            icon: 'pi pi-chart-scatter',
-            route: '/bi/dashboards'
+  items.value = menu;
+}
 
-          },
-          {
-                separator: true
-            },     
-            {
+const logout = () => {
+  authStore.logout();
+  router.push('/auth/login');
+};
 
-label: 'Minhas Visões',
-    icon: 'pi pi-gauge',
-    items: [ 
-      {
-        label: 'Unidade 1',
-        icon: 'pi pi-building-columns',
-        route: '/cadastros/cidades'
-      },
-      {
-        label: 'Unidade 2',
-        icon: 'pi pi-building-columns',
-        route: '/cadastros/cidades'
-      },
-]
-  },  
-             
-        
-        ]
-    },
-   
-             /*
-    
-    {
-        label: 'Documentos',
-        icon: 'pi pi-bookmark-fill',
-        items: [
-          {
-            label: 'Documentos',
-        icon: 'pi pi-bookmark-fill',
-        route: '/documentos',
-          },
+onMounted(() => {
+  buildItems();
+});
 
-          {
-                separator: true
-            },
-            {
-                label: 'Políticas',
-                icon: 'pi pi-bolt',
-                route: '/documentos/politicas'
-            },
-            {
-                separator: true
-            },
-            {
-                label: 'Procedimento Padrão',
-                icon: 'pi pi-server',
-                route: '/documentos/pops'
-            },
-            {
-                separator: true
-            },
-            {
-                label: 'Fluxogramas',
-                icon: 'pi pi-pencil',
-                route: '/fluxogramas'
-            }
-        ]
-    },
-
-    {
-        label: 'Atendimento',
-        icon: 'pi pi-ticket',
-        items: [{
-                label: 'Chamados',
-                icon: 'pi pi-pencil',
-
-                items: [
-                {
-                label: 'Novo Chamado',
-                icon: 'pi pi-pencil',
-              
-              },
-              {
-                separator: true
-            },
-              {
-                  label: 'Atender Chamados',
-                  icon: 'pi pi-play',
-                badge: meusatendimentos,
-
-                },
-                {
-                separator: true
-            },
-              {
-                label: 'Meus Chamados',
-                icon: 'pi pi-bookmark-fill',
-                badge: meuschamados,
-
-              }]
-            },
-            {
-                separator: true
-            },
-            
-            {
-                label: 'Relatórios',
-                icon: 'pi pi-chart-bar',
-            }],
-        badge: somaBadgeChamados
-    }*/]);
-
-    
-    const logout = () => {
-      authStore.logout();
-      router.push('/auth/login');
-    };
-
-  
 </script>

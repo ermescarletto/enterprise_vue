@@ -12,7 +12,8 @@ import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 import PrivateLayout from '@/layouts/PrivateLayout.vue'
 import rotasCadastros from '@/modules/cadastros/routes';
 import rotasDocumentos from '@/modules/documentos/routes';
-import rotasAutenticacao from '@/modules/users/routes';
+import rotasAutenticacao from '@/modules/users/eRoutes';
+import rotasUsuarios from '@/modules/users/iRoutes'; 
 import rotasDashboards from '@/modules/dashboards/routes';
 import HomeFront from '@/modules/cms/views/HomeFront.vue';
 
@@ -38,7 +39,6 @@ const routes = [
         children: [
         ...rotasAutenticacao,
         ]
-    
       },
       {
         path: 'home',
@@ -49,6 +49,20 @@ const routes = [
           {
             path: '/',
             component: HomeFront
+          },
+              
+          {
+            path: 'guia',
+            name: 'Guia Inicial',
+            component: GuiaInicial,
+            meta: { requiresAuth: true, title: 'MS Enterprise - Guia' },
+          },
+          {
+            path: '/users',
+            name: 'Usuarios',
+            children:  [
+              ...rotasUsuarios, // Rotas dinâmicas do módulo de Pessoas
+            ]
           },
           {
             path: '/cadastros',
@@ -92,6 +106,7 @@ const routes = [
             next('/auth/login'); // Allow access to /auth if not authenticated
           }
         },
+        component: PrivateLayout,
         meta: { requiresAuth: true, title: 'MS Enterprise - BI' },
         children: [
           ...rotasDashboards, // Rotas dinâmicas do módulo de Pessoas
@@ -109,30 +124,7 @@ const routes = [
       },
     ]
   },
-  
-  
 
-  {
-    path: '/departamentos',
-    name: 'Departamentos',
-    component: OrganogramaEmpresarial,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Organograma' },
-    
-  },
-
-  {
-    path: '/equipes',
-    name: 'Equipes',
-    component: EquipesAtendimento,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Organograma' },
-    
-  },
-  {
-    path: '/guia',
-    name: 'Guia Inicial',
-    component: GuiaInicial,
-    meta: { requiresAuth: true, title: 'MS Enterprise - Guia' },
-  },
 
   
   { path: '/:pathMatch(.*)*', 

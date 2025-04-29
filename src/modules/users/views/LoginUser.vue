@@ -74,11 +74,11 @@
   </Dialog>
 </template>
 
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
+import axios from 'axios'; // Import axios
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
@@ -122,15 +122,12 @@ const handleLogin = async () => {
   if (emailError.value || passwordError.value) return;
 
   try {
-    const response = await fetch('http://localhost:8000/auth/auth-login/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value, password: password.value }),
+    const response = await axios.post('auth/auth-login/', {
+      email: email.value,
+      password: password.value,
     });
 
-    if (!response.ok) throw new Error('Login failed.');
-
-    const data = await response.json();
+    const data = response.data;
     if (data.token) {
       authStore.login(data);
       rememberMe.value

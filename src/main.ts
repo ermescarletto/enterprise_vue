@@ -15,6 +15,7 @@ import 'primeflex/primeflex.css';
 const app = createApp(App);
 
 axios.defaults.baseURL = 'https://api.maissabor.ind.br/';
+//axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true; // Permite cookies e credenciais
 
 app.use(PrimeVue, {
