@@ -12,12 +12,12 @@
         <label for="usuario" class="block font-semibold">Usuário</label>
         <Dropdown
           v-model="localGerente.usuario"
-          :options="usuarios"
+          :options="users"
           optionLabel="email"
           optionValue="id"
           placeholder="Selecione um usuário"
           class="w-full"
-          :loading="loadingUsuarios"
+          :loading="loadingUser"
         />
       </div>
 
@@ -54,9 +54,9 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 //import ProgressSpinner from "primevue/progressspinner";
 import { Gerente } from "../models/Gerente";
-import { Usuario } from "@/modules/users/models/User";
+import { User } from "@/modules/users/models/User";
 import { useUnidades } from "../services/useUnidades";
-import { useUsuarios } from "@/modules/users/services/useUsers";
+import { useUsers } from "@/modules/users/services/useUsers";
 
 const props = defineProps<{
   visible: boolean;
@@ -67,10 +67,10 @@ const emits = defineEmits(["save", "close"]);
 const selectedUnidades = ref<[]>();
 
 const { unidades, loadUnidades } = useUnidades();
-const { usuarios, loadUsuarios, loadingUsuarios } = useUsuarios();
+const { users, fetchUsers, loadingUser } = useUsers();
 
 const localGerente = ref<Gerente>({
-  usuario: {} as Usuario,
+  usuario: {} as User,
   unidades: [],
   id: 0,
   ativo: false
@@ -92,7 +92,7 @@ watch(
       localGerente.value = { ...newGerente };
     } else {
       localGerente.value = {
-        usuario: {} as Usuario,
+        usuario: {} as User,
         unidades: [],
         id: 0,
         ativo: false
@@ -110,7 +110,7 @@ const saveGerente = () => {
 const dialogTitle = computed(() => (props.gerente?.id ? "Editar Gerente" : "Novo Gerente"));
 
 onMounted(() => {
-  loadUsuarios();
+  fetchUsers();
   loadUnidades().then((data) => (listUnidades.value = [data,[]]));
 })
 </script>

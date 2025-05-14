@@ -5,7 +5,7 @@ export class Cidade {
         estado: string;
         cep_de: number;
         cep_ate: number;
-        
+      
     
     constructor(data: any) {
         this.id = data.id;

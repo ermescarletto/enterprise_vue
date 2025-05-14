@@ -6,9 +6,7 @@ import { useAuthStore } from "@/store/auth";
 const api = axios.create({
 //  baseURL: "https://api.maissabor.ind.br/",
   baseURL: "http://localhost:8000/",
-
   withCredentials: true, // Permite cookies e credenciais
-
 });
 
 api.interceptors.request.use((config) => {

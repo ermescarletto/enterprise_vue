@@ -1,5 +1,5 @@
 <template>
-    <div class="container flex justify-content-center align-items-center vh-100">
+    <div class="container flex justify-content-center align-items-center">
       <div class="card text-center p-4 shadow-2" style="max-width: 600px;">
         <h1 class="text-primary">Bem-vindo à Intranet</h1>
         <p class="text-secondary mt-3">

@@ -10,14 +10,16 @@ import { createPinia } from 'pinia';
 import 'primeicons/primeicons.css';
 import ".//assets/main.css"
 import 'primeflex/primeflex.css';
+import i18n from './i18n'; // Importação do i18n
 
 
 const app = createApp(App);
 
-axios.defaults.baseURL = 'https://api.maissabor.ind.br/';
-//axios.defaults.baseURL = 'http://localhost:8000';
+//axios.defaults.baseURL = 'https://api.maissabor.ind.br/';
+axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true; // Permite cookies e credenciais
 
+app.use(i18n); // Adiciona o i18n ao app
 app.use(PrimeVue, {
     theme: {
         preset: Aura,
